@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Должность</title>
+	<div th:insert="../components/nav :: tags"></div>
+</head>
+
+<body>
+<p class="errornoti" th:text="${message}"></p>
+
+<div th:insert="../components/nav :: navBar"></div>
+<div th:insert="../components/nav :: sideNav"></div>
+
+
+<div class="addForm">
+	<img class="backImage" th:src="'https://api.dicebear.com/5.x/shapes/svg?seed=codemayychinwo'" alt="">
+	<form data-formName="Add JobPosition" th:action="@{/savejobposition}" method="post" th:object="${jobposition}">
+		<div>
+			<input type="text" th:field="*{positionName}" placeholder="Введите название должности" required="required" />
+			<label for="name">Название</label>
+			<label th:if="${#fields.hasErrors('positionName')}" th:errors="*{positionName}"
+				   style="color: red;">Ошибка</label>
+		</div>
+		<div>
+			<input type="submit" th:value="Добавить">
+		</div>
+	</form>
+	<div class="backgroundExit" onclick="generateTeamBox()"></div>
+</div>
+
+<div class="data-section">
+	<form class="searchForm" th:action="@{/searchPosition/1}" th:object="${jobposition}" method="get">
+		<h2>
+			<ion-icon name="people-outline"></ion-icon>
+			<p th:if="${list.size() >= 1}">Должности</p>
+			<p th:if="${list.size() == 0}">Должность</p>
+			<span>Всего - <span>[[${totalPositions}]]</span></span>
+		</h2>
+		<input type="hidden" name="sortField" th:value="${sortField}" />
+		<input type="hidden" name="sortDir" th:value="${sortDir}" />
+		<input type="text" name="keyword" th:value="${keyword}" placeholder="Введите ключевое слово" required />
+
+		<button type="submit">
+			<ion-icon name="search-outline"></ion-icon>
+		</button>
+		<button>
+			<a th:href="@{/jobposition}">
+				<ion-icon name="refresh-outline"></ion-icon>
+			</a>
+		</button>
+		<button type="button" onclick="generateTeamBox()">
+			<a>
+				<ion-icon name="add-outline"></ion-icon>
+			</a>
+		</button>
+	</form>
+
+
+	<div class="resourceContainer">
+		<div class="sort-box">
+			<div class="sort-links" th:if="${totalPositions > 0}">
+				<a
+						th:href="@{'/searchPosition/' + ${currentPage} + '?sortField=positionCode&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+					Код
+				</a>
+				<a
+						th:href="@{'/searchPosition/' + ${currentPage} + '?sortField=positionName&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+					Название
+				</a>
+			</div>
+		</div>
+		<p class="no-data" th:if="${list.size() == 0}">
+			должности не найдены
+		</p>
+		<div class="data-card" th:each="position: ${list}">
+
+			<img class="backImage"
+				 th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${position.positionCode}+''" alt="">
+
+			<p class="data-code" th:text="${position.positionCode}"></p>
+			<div class="data-row">
+					<span class="data-label">
+						<ion-icon name="id-card-outline"></ion-icon>
+					</span>
+				<p class="data-text" th:text="${position.positionName}"></p>
+			</div>
+			<div class="data-row">
+				<span class="data-label">Всего вакансий</span>
+				<p class="data-text" th:text="${countMap.get(position.positionId)}"></p>
+			</div>
+			<a class="data-edit-button" th:href="@{/editjobposition(id=${position.positionId})}" title="Редактировать данные">
+				<ion-icon name="create-outline"></ion-icon>
+			</a>
+		</div>
+
+	</div>
+
+	<!-- пагинация -->
+	<div class="newPagination" th:if="${totalPositions > 0}">
+		<div>
+			<a th:if="${currentPage > 1}"
+			   th:href="@{'/searchPosition/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+				<ion-icon name="play-skip-back-outline"></ion-icon>
+			</a>
+			<span th:unless="${currentPage > 1}">
+					<ion-icon name="play-skip-back-outline"></ion-icon>
+				</span>
+
+			<a th:if="${currentPage > 1}"
+			   th:href="@{'/searchPosition/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+				<ion-icon name="chevron-back-outline"></ion-icon>
+			</a>
+			<span th:unless="${currentPage > 1}">
+					<ion-icon name="chevron-back-outline"></ion-icon>
+				</span>
+
+			<p>
+				[[${currentPage}]] - [[${totalPages}]]
+			</p>
+
+			<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+					<a th:if="${i != currentPage}"
+					   th:href="@{'/searchPosition/' + ${i}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}">[[${i}]]</a>
+					<span th:unless="${i != currentPage}">[[${i}]]</span>
+				</span>
+
+			<a th:if="${currentPage < totalPages}"
+			   th:href="@{'/searchPosition/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+				<ion-icon name="chevron-forward-outline"></ion-icon>
+			</a>
+			<span th:unless="${currentPage < totalPages}">
+					<ion-icon name="chevron-forward-outline"></ion-icon>
+				</span>
+
+			<a th:if="${currentPage < totalPages}"
+			   th:href="@{'/searchPosition/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+				<ion-icon name="play-skip-forward-outline"></ion-icon>
+			</a>
+			<span th:unless="${currentPage < totalPages}">
+					<ion-icon name="play-skip-forward-outline"></ion-icon>
+				</span>
+		</div>
+	</div>
+</div>
+
+<!-- <div class="tableBox teamTableBox">
+    <div class="searchBox">
+        <h2>JobPosition</h2>
+        <form th:action="@{/searchPosition/1}" th:object="${jobposition}" method="get">
+            <input type="hidden" name="sortField" th:value="${sortField}" />
+            <input type="hidden" name="sortDir" th:value="${sortDir}" />
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="Введите ключевое слово" required />
+            <button type="submit"><ion-icon name="search-outline"></ion-icon></button>
+            <a th:href="@{/jobposition}"><ion-icon name="refresh-outline"></ion-icon></a>
+            <div onclick="generateTeamBox()"><ion-icon name="add-outline"></ion-icon></div>
+        </form>
+    </div>
+    <div class="data-table-box">
+        <div class="data-table">
+            <div class="data-table-row">
+                <div class="data-table-col">НО</div>
+                <div class="data-table-col"><a class="sort-button"
+                        th:href="@{'/searchPosition/' + ${currentPage} + '?sortField=positionCode&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+                        Код<ion-icon name="funnel-outline"></ion-icon>
+                    </a></div>
+                <div class="data-table-col"><a class="sort-button"
+                        th:href="@{'/searchPosition/' + ${currentPage} + '?sortField=positionName&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+                        Название<ion-icon name="funnel-outline"></ion-icon>
+                    </a>
+                </div>
+                <div class="data-table-col">Количество вакансий</div>
+                <div class="data-table-col">Опция</div>
+            </div>
+
+            <div class="data-table-row" th:each="position: ${list}">
+                <div class="data-table-col" th:text="${index+ positionStat.index}" />
+                <div class="data-table-col" th:text="${position.positionCode}" />
+                <div class="data-table-col" th:text="${position.positionName}" />
+                <div class="data-table-col" th:text="${countMap.get(position.positionId)}"></div>
+                <div class="data-table-col"><a class="action-button"
+                        th:href="@{/editjobposition(id=${position.positionId})}">Action</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination">
+        <div>Всего должностей: <span class="pagenum">[[${totalPositions}]]</span> - Страница <span
+                class="pagenum">[[${currentPage}]] </span>из <span class="pagenum">[[${totalPages}]]</span></div>
+
+        <div class="page-reference">
+
+            <a th:if="${currentPage > 1}"
+                th:href="@{'/searchPosition/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">First</a>
+            <span th:unless="${currentPage > 1}">First</span>
+
+            <a th:if="${currentPage > 1}"
+                th:href="@{'/searchPosition/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}"><ion-icon
+                    name="chevron-back-circle-outline"></ion-icon></a>
+            <span th:unless="${currentPage > 1}"><ion-icon name="chevron-back-circle-outline"></ion-icon></span>
+
+            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                <a th:if="${i != currentPage}"
+                    th:href="@{'/searchPosition/' + ${i}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}">[[${i}]]</a>
+                <span th:unless="${i != currentPage}">[[${i}]]</span>
+                &nbsp;&nbsp;
+            </span>
+
+            <a th:if="${currentPage < totalPages}"
+                th:href="@{'/searchPosition/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}"><ion-icon
+                    name="chevron-forward-circle-outline"></ion-icon></a>
+            <span th:unless="${currentPage < totalPages}">
+            <ion-icon name="chevron-forward-circle-outline"></ion-icon></span>
+
+            <a th:if="${currentPage < totalPages}"
+                th:href="@{'/searchPosition/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Last</a>
+            <span th:unless="${currentPage < totalPages}">Last</span>
+        </div>
+    </div>
+</div> -->
+</body>
+
+</html>

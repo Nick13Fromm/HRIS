@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Отчет о вакансии</title>
+	<div th:insert="../components/nav :: tags"></div>
+</head>
+
+<body>
+<p class="errornoti" th:text="${message}"></p>
+
+<div th:insert="../components/nav :: navBar"></div>
+
+<div class="reportBoxContainerHead">
+	<h3>[[${para.reportTitle}]]</h3>
+	<a th:href="@{'/jobpostreport/' + ${postId}}">Получить отчет (PDF)</a>
+</div>
+<div class="reportboxContainer">
+
+	<div class="data-card jobPostCardo">
+
+		<img class="backImage" th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${jp.postCode}+''" alt="">
+
+		<div class="data-card-head">
+			<div>
+				<div class="data-status" th:switch="${jp.postStatus}">
+					<p th:case="'CLOSED*'" class="closed">ЗАКРЫТО*</p>
+					<p th:case="'CLOSED'" class="dued">СРОК ИСТЕК</p>
+					<p th:case="'POSTED'" class="posted">ОТКРЫТО</p>
+					<p th:case="*" class="none">НЕТ</p>
+				</div>
+				<div class="focyes" th:if="${jp.foc == true}"></div>
+				<div class="focno" th:if="${jp.foc == false}"></div>
+			</div>
+
+			<p class="data-code" th:text="${jp.postCode}"></p>
+		</div>
+		<div class="jobPostInfo">
+			<p>
+				<span>Название</span> <span th:text="${jp.postName}"></span>
+			</p>
+			<p>
+				<span>Должность</span><span th:text="${jp.jobPosition.positionName}"></span>
+			</p>
+			<p>
+				<span>Комментарий</span> <span th:text="${jp.comment}"></span>
+			</p>
+			<div>
+				<p>
+					<ion-icon name="people-outline"></ion-icon>
+					<span th:text="${jp.team.teamName}"></span>
+				</p>
+				<p>
+					<ion-icon name="business-outline"></ion-icon>
+					<span th:text="${jp.team.department.departmentName}"></span>
+				</p>
+			</div>
+			<div>
+				<p>
+					<ion-icon name="time-outline"></ion-icon>
+					<span th:text="${jp.postDate}"></span>
+				</p>
+				<p>
+					<ion-icon name="timer-outline"></ion-icon>
+					<span th:text="${jp.dueDate}"></span>
+				</p>
+			</div>
+		</div>
+		<div class="data-card-footer">
+			<div>
+				<a th:href="'https://docs.google.com/spreadsheets/d/'+${jp.sheetId}+''" target="_blank">
+					<ion-icon name="cloudy-outline"></ion-icon>
+				</a>
+				<div>
+					<img th:src="'https://api.dicebear.com/5.x/micah/svg?seed='+${jp.user.userName}+''" alt="">
+					<p th:text="${jp.user.userName}"></p>
+				</div>
+				<div>
+					<ion-icon name="person-outline"></ion-icon>
+					<p>[[${para.requiredCount}]]</p>
+				</div>
+				<div>
+					<ion-icon name="mail-unread-outline"></ion-icon>
+					<p>[[${para.appliedCount}]]</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="chartContainer chartContainerReport">
+
+		<div class="chartData">
+			<span class="chart-name1">Требуется</span>
+			<span class="agencyCount">[[${para.requiredCount}]]</span>
+		</div>
+		<div class="chartData">
+			<span class="chart-name2">Подано</span>
+			<span class="universityCount">[[${para.appliedCount}]]</span>
+		</div>
+		<div class="chartData">
+			<span class="chart-name3">Нанято</span>
+			<span class="directRecruitCount">[[${para.hiredCount}]]</span>
+		</div>
+		<div class="chartData">
+			<span class="chart-name4">Отклонено</span>
+			<span class="trainingCenterCount">[[${para.rejectedCount}]]</span>
+		</div>
+		<div class="chartData">
+			<span class="chart-name5">Другое</span>
+			<span class="othersCount">0</span>
+		</div>
+		<div>
+			<canvas id="myChart"></canvas>
+		</div>
+	</div>
+</div>
+
+<!--
+<div>
+    <a th:href="@{'/jobpostreport/' + ${postId}}">Отчет</a>
+</div>
+<div>
+    <span>Дата публикации - [[${para.postDate}]] | Дата окончания - [[${para.dueDate}]]</span>
+</div>
+<div>
+    <p>Название вакансии - [[${para.jobPostName}]]</p>
+    <p>Название должности - [[${para.positionName}]]</p>
+    <p>Требуется - [[${para.requiredCount}]]</p>
+    <p>Подано - [[${para.appliedCount}]]</p>
+    <p>Нанято - [[${para.hiredCount}]]</p>
+    <p>Отклонено - [[${para.rejectedCount}]]</p>
+</div>
+-->
+
+<!-- parameter end -->
+<div class="reportBoxContainerHead">
+	<h3>Таблица соискателей</h3>
+</div>
+<!-- applicant table start -->
+<div class="reportTable" style="overflow-x:auto;">
+	<table>
+		<thead>
+		<tr>
+			<th>Имя</th>
+			<th>Электронная почта</th>
+			<th>Телефон</th>
+			<th>Ресурс</th>
+			<th>Статус</th>
+			<th>Состояние</th>
+			<th>Время подачи</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="data : ${applicantList}">
+			<td>[[${data.name}]]</td>
+			<td>[[${data.email}]]</td>
+			<td>[[${data.mobile}]]</td>
+			<td>[[${data.resource}]]</td>
+			<td>[[${data.status}]]</td>
+			<td>[[${data.state}]]</td>
+			<td>[[${data.applyTime}]]</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+<!-- applicant table end -->
+</body>
+
+</html>

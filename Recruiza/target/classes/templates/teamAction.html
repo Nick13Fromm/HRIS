@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Действие команды</title>
+	<div th:insert="../components/nav :: tags"></div>
+</head>
+
+<body>
+<p class="errornoti" th:text="${message}"></p>
+
+<div th:insert="../components/nav :: navBar"></div>
+<div th:insert="../components/nav :: sideNav"></div>
+
+<img class="backImage2" th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${team.teamCode}+''" alt="">
+
+<button class="back_button">
+	<a th:href="@{/team}"><ion-icon name="arrow-back-outline"></ion-icon></a>
+</button>
+
+<div class="updateform">
+	<form data-formName="Edit Team" th:action="@{/updateTeam}" method="post" th:object="${team}">
+		<div>
+			<input type="hidden" th:field="*{teamId}" />
+			<input type="hidden" name="oldName" th:value="${team.teamName}" />
+			<input type="hidden" name="oldDeptName" th:value="${team.departmentName}" />
+
+			<input type="text" th:field="*{teamName}" placeholder="Введите название команды" required="required" />
+			<label for="name">Название</label>
+			<label th:if="${#fields.hasErrors('teamName')}" th:errors="*{teamName}" style="color: red;">Ошибка</label>
+		</div>
+
+		<div>
+			<label for="depts">Выберите отдел</label>
+			<select th:field="*{departmentName}">
+				<option th:each="d : ${deptNameList}" th:value="${d}" th:text="${d}"></option>
+			</select>
+			<p th:text="${selectDept}"></p>
+		</div>
+		<div class="actionBox">
+			<input type="submit" value="Обновить" />
+		</div>
+	</form>
+
+	<div class="deleteBox">
+		<button onclick="deleteform()">Удалить</button>
+	</div>
+</div>
+
+<div class="confirmationModal deleteConfirmationModal" style="display: none;">
+	<div class="modalBox">
+		<button onclick="deleteformclose()">
+			<ion-icon name="close-outline"></ion-icon>
+		</button>
+		<h2>Удалить?</h2>
+		<p>Вы уверены, что хотите удалить <b th:text="${team.teamName}"></b>?</p>
+		<div class="modalButtonBox">
+			<a th:href="@{/deleteTeam(id=${team.teamId})}">Да <ion-icon name="sad-outline"></ion-icon></a>
+			<a onclick="deleteformclose()">Нет <ion-icon name="happy-outline"></ion-icon></a>
+		</div>
+	</div>
+	<div class="backgroundExit" onclick="deleteformclose()"></div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/form.js}"></script>
+</body>
+
+</html>

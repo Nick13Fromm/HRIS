@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Действие публикации</title>
+    <div th:insert="../components/nav :: tags"></div>
+</head>
+
+<body>
+
+<h3>Публикация</h3>
+<div>
+    <form th:action="@{/postJP}" method="post" th:object="${jobPost}">
+
+        <input type="hidden" name="jobPostId" th:value="${jobPost.postId}">
+        <div>
+            <p>Название : <span th:text="${jobPost.postName}"></span></p>
+        </div>
+
+        <div>
+            <p>Количество : <span th:text="${jobPost.count}"></span></p>
+        </div>
+
+        <div>
+            <label for="postDate">Дата публикации</label>
+            <input type="date" name="postDate" placeholder="Введите дату публикации" class="customdate" required />
+        </div>
+
+        <div class="dueDateBox">
+            <label for="dueDate">Дата окончания</label>
+            <input type="date" name="dueDate" placeholder="Введите дату окончания" class="customdate" required />
+        </div>
+
+        <div>
+            <label for="sheet">ID листа</label>
+            <input type="text" name="sheetId" placeholder="Введите ID листа" required />
+        </div>
+        <div>
+            <input type="submit" value="Опубликовать" />
+        </div>
+    </form>
+</div>
+
+</body>
+
+</html>

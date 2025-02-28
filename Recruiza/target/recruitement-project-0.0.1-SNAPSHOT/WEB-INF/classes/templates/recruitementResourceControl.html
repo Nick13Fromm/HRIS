@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Ресурс для набора персонала</title>
+	<div th:insert="../components/nav :: tags"></div>
+</head>
+
+<body>
+<p class="errornoti" th:text="${message}"></p>
+
+<div th:insert="../components/nav :: navBar"></div>
+<div th:insert="../components/nav :: sideNav"></div>
+
+<div class="addForm">
+	<form data-formName="Добавить ресурс" th:action="@{/saveresource}" method="post" th:object="${resource}">
+		<div>
+			<label>Название</label>
+			<input type="text" th:field="*{resourceName}" required="required" placeholder="Введите название ресурса" />
+		</div>
+		<div>
+			<label>Ссылка</label>
+			<input type="text" th:field="*{link}" placeholder="Введите ссылку" required="required">
+		</div>
+		<div>
+			<label>Адрес</label>
+			<input type="text" th:field="*{address}" placeholder="Адрес" required="required" />
+		</div>
+		<div>
+			<label>Телефон</label>
+			<input type="text" th:field="*{resourceMobile}" placeholder="Введите телефон" required="required">
+		</div>
+		<div>
+			<label>Контактное лицо</label>
+			<input type="text" th:field="*{contactPerson}" placeholder="Введите контактное лицо" required="required">
+		</div>
+		<div>
+			<label class="col-md-2 col-form-label">Тип набора персонала</label>
+			<select class="form-select" aria-label="Recruitement Type" id="type" th:field="*{recruitementType}">
+				<option th:each=" i : ${rList} " th:value="${i}" th:text="${i}"></option>
+			</select>
+		</div>
+		<div>
+			<input type="submit" value="Добавить" />
+		</div>
+	</form>
+	<div class="backgroundExit" onclick="generateTeamBox()"></div>
+</div>
+
+<div class="data-section">
+	<form class="searchForm" th:action="@{/searchResource/1}" th:object="${resource}" method="get">
+		<h2>
+			<ion-icon name="people-outline"></ion-icon>
+			<p th:if="${list.size() >= 1}">Ресурсы для набора персонала</p>
+			<p th:if="${list.size() == 0}">Ресурс для набора персонала</p>
+			<span>Всего - <span>[[${totalResources}]]</span></span>
+		</h2>
+		<input type="hidden" name="sortField" th:value="${sortField}" />
+		<input type="hidden" name="sortDir" th:value="${sortDir}" />
+		<input type="text" name="keyword" th:value="${keyword}" placeholder="Введите ключевое слово" required />
+
+		<button type="submit">
+			<ion-icon name="search-outline"></ion-icon>
+		</button>
+		<button>
+			<a th:href="@{/recruitementresource}">
+				<ion-icon name="refresh-outline"></ion-icon>
+			</a>
+		</button>
+		<button type="button" onclick="generateTeamBox()">
+			<a>
+				<ion-icon name="add-outline"></ion-icon>
+			</a>
+		</button>
+	</form>
+
+	<div class="resourceContainer">
+		<div class="sort-box" th:if="${totalResources > 0}">
+			<div class="sort-links">
+				<a class="sort-button"
+				   th:href="@{'/searchResource/' + ${currentPage} + '?sortField=resourceCode&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+					Код
+				</a>
+				<a class="sort-button"
+				   th:href="@{'/searchResource/' + ${currentPage} + '?sortField=resourceName&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+					Название
+				</a>
+			</div>
+		</div>
+		<div class="chartContainer">
+			<div class="chartData">
+				<span class="chart-name1">Агентство</span>
+				<span class="agencyCount" th:text="${totalResourcesByAgency}"></span>
+				<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=Agency" alt="">
+			</div>
+			<div class="chartData">
+				<span class="chart-name2">Университет</span>
+				<span class="universityCount" th:text="${totalResourcesByUni}"></span>
+				<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=University" alt="">
+			</div>
+			<div class="chartData">
+				<span class="chart-name3">Прямой набор</span>
+				<span class="directRecruitCount" th:text="${totalResourcesByDirect}"></span>
+				<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=DirectRecruit" alt="">
+			</div>
+			<div class="chartData">
+				<span class="chart-name4">Центр обучения</span>
+				<span class="trainingCenterCount" th:text="${totalResourcesByTrainingCenter}"></span>
+				<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=TrainingCenter" alt="">
+			</div>
+			<div class="chartData">
+				<span class="chart-name5">Другое</span>
+				<span class="othersCount" th:text="${totalResourcesByOthers}"></span>
+				<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=Others" alt="">
+			</div>
+			<div>
+				<canvas id="myChart"></canvas>
+			</div>
+		</div>
+		<p class="no-data" th:if="${list.size() == 0}">
+			ресурсы не найдены
+		</p>
+		<div class="data-card" th:each="resource : ${list}">
+
+			<img class="backImage"
+				 th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${resource.resourceCode}+''" alt="">
+			<div class="data-code">
+				<p th:text="${resource.resourceCode}"></p>
+				<p class="data-text" th:text="${resource.recruitementType}"></p>
+			</div>
+			<div class="data-row">
+				<ion-icon name="pricetag-outline"></ion-icon>
+				<p class="data-text" th:text="${resource.resourceName}"></p>
+			</div>
+			<div class="data-row">
+				<ion-icon name="link-outline"></ion-icon>
+				<p class="data-text" th:text="${resource.link}"></p>
+			</div>
+			<div class="data-row">
+				<ion-icon name="home-outline"></ion-icon>
+				<p class="data-text" th:text="${resource.address}"></p>
+			</div>
+			<div class="data-row">
+				<ion-icon name="phone-portrait-outline"></ion-icon>
+				<p class="data-text" th:text="${resource.resourceMobile}"></p>
+			</div>
+			<div class="data-row">
+				<ion-icon name="person-outline"></ion-icon>
+				<p class="data-text" th:text="${resource.contactPerson}"></p>
+			</div>
+			<a class="data-edit-button" th:href="@{/editresource(id=${resource.resourceId})}" title="Редактировать данные">
+				<ion-icon name="create-outline"></ion-icon>
+			</a>
+		</div>
+
+		<!-- <div class="data-table-row" th:each="resource : ${list}">
+            <div class="data-table-col" th:text="${index+ resourceStat.index}"></div>
+            <div class="data-table-col" th:text="${resource.resourceCode}"></div>
+            <div class="data-table-col" th:text="${resource.resourceName}"></div>
+            <div class="data-table-col" th:text="${resource.link}"></div>
+            <div class="data-table-col" th:text="${resource.address}"></div>
+            <div class="data-table-col" th:text="${resource.resourceMobile}"></div>
+            <div class="data-table-col" th:text="${resource.contactPerson}"></div>
+            <div class="data-table-col" th:text="${resource.recruitementType}"></div>
+            <div class="data-table-col"><a class="action-button"
+                    th:href="@{/editresource(id=${resource.resourceId})}">Action</a></div>
+        </div> -->
+
+	</div>
+
+	<!-- pagination -->
+	<div class="newPagination" th:if="${totalResources > 0}">
+		<div>
+			<a th:if="${currentPage > 1}"
+			   th:href="@{'/searchResource/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+				<ion-icon name="play-skip-back-outline"></ion-icon>
+			</a>
+			<span th:unless="${currentPage > 1}">
+					<ion-icon name="play-skip-back-outline"></ion-icon>
+				</span>
+
+			<a th:if="${currentPage > 1}"
+			   th:href="@{'/searchResource/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+				<ion-icon name="chevron-back-outline"></ion-icon>
+			</a>
+			<span th:unless="${currentPage > 1}">
+					<ion-icon name="chevron-back-outline"></ion-icon>
+				</span>
+
+			<p>
+				[[${currentPage}]] - [[${totalPages}]]
+			</p>
+
+			<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+					<a th:if="${i != currentPage}"
+					   th:href="@{'/searchResource/' + ${i}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}">[[${i}]]</a>
+					<span th:unless="${i != currentPage}">[[${i}]]</span>
+				</span>
+
+			<a th:if="${currentPage < totalPages}"
+			   th:href="@{'/searchResource/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+				<ion-icon name="chevron-forward-outline"></ion-icon>
+			</a>
+			<span th:unless="${currentPage < totalPages}">
+					<ion-icon name="chevron-forward-outline"></ion-icon>
+				</span>
+
+			<a th:if="${currentPage < totalPages}"
+			   th:href="@{'/searchResource/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+				<ion-icon name="play-skip-forward-outline"></ion-icon>
+			</a>
+			<span th:unless="${currentPage < totalPages}">
+					<ion-icon name="play-skip-forward-outline"></ion-icon>
+				</span>
+		</div>
+	</div>
+</div>
+
+</body>
+
+</html>

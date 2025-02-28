@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Администратор</title>
+	<div th:insert="../components/nav :: tags"></div>
+</head>
+
+<body>
+<div th:insert="../components/nav :: navBar"></div>
+
+<!-- Ошибка -->
+<p class="errornoti" th:text="${msg}"></p>
+<p class="errornoti" th:text="${error}"></p>
+
+<div class="addForm">
+	<form data-formName="Создать нового пользователя" th:action="@{'/admin/addUserServlet/' + ${keyword}}" th:object="${bean}"
+		  method="post">
+		<div>
+			<input type="text" th:field="*{userName}" placeholder="Введите имя пользователя" required="required" />
+			<label for="name">Имя</label>
+			<span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span>
+		</div>
+		<div>
+			<input type="email" th:field="*{userEmail}" placeholder="Введите email пользователя" />
+			<label for="email">Email</label>
+			<p th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}"></p>
+		</div>
+		<div>
+			<input type="text" th:field="*{userMobile}" placeholder="Введите телефон пользователя" />
+			<label for="mobile">Телефон</label>
+			<p th:if="${#fields.hasErrors('userMobile')}" th:errors="*{userMobile}"></p>
+		</div>
+		<div>
+			<select th:field="*{role}">
+				<option th:value="'HR_Role'">Отдел кадров (HR)</option>
+				<option th:value="'DH_Role'">Руководитель отдела (DH)</option>
+				<option th:value="'GM_Role'">Генеральный директор (GM)</option>
+				<option th:value="'PM_Role'">Руководитель проекта (PM)</option>
+				<option th:value="'TM_Role'">Менеджер команды (TM)</option>
+				<option th:value="'MARKETER'">Маркетинговая команда (MT)</option>
+			</select>
+			<label for="role">Должность</label>
+			<p th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></p>
+		</div>
+		<div>
+			<input type="password" id="password" th:field="*{password}" placeholder="Введите пароль пользователя"
+				   required />
+			<label for="password">Пароль</label>
+			<p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+		</div>
+		<div>
+			<input type="password" th:field="*{confPassword}" placeholder="Подтвердите пароль"
+				   id="passcode" required oninput="checkPasswordMatch();" />
+			<label for="confirm-password">Повторите пароль</label>
+			<p th:if="${#fields.hasErrors('confPassword')}" th:errors="*{confPassword}"></p>
+		</div>
+
+		<div>
+			<input type="submit" value="Создать пользователя" />
+		</div>
+	</form>
+	<div class="backgroundExit" onclick="generateTeamBox()"></div>
+</div>
+
+<section class="adminUserSection">
+	<div class="usersearchBox">
+		<h1>Управление пользователями</h1>
+	</div>
+
+	<div class="chartContainer">
+
+		<div class="chartData">
+			<span>Активные пользователи</span>
+			<span>[[${countActive}]]</span>
+			<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=Active" alt="">
+		</div>
+		<div class="chartData">
+			<span>Неактивные пользователи</span>
+			<span>[[${countInactive}]]</span>
+			<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=Inactive" alt="">
+		</div>
+
+		<div>
+			<canvas id="myChart"></canvas>
+		</div>
+	</div>
+	<form class="searchForm" th:action="@{/admin/searchUser/1}">
+		<h2>
+			<ion-icon name="people-outline"></ion-icon>
+			Пользователи
+			<span>[[${totalUsers}]]</span>
+		</h2>
+		<input type="hidden" name="sortField" th:value="${sortField}" />
+		<input type="hidden" name="sortDir" th:value="${sortDir}" />
+		<input type="text" name="keyword" th:value="${keyword == 'keyword' ? ' ' : keyword}" />
+		<button type="submit">
+			<ion-icon name="search-outline"></ion-icon>
+		</button>
+		<button>
+			<a th:href="@{/admin/addUser/keyword}"><ion-icon name="refresh-outline"></ion-icon></a>
+		</button>
+		<button type="button" onclick="generateTeamBox()">
+			<a>
+				<ion-icon name="add-outline"></ion-icon>
+			</a>
+		</button>
+	</form>
+	<div class="userContainer" th:if="${users != null }">
+		<p th:if="${users.empty}">Нет данных</p>
+		<div class="userCard" th:each="data : ${users}">
+			<div class="activity">
+				<div th:if="${data.userStatus == 'ACTIVE'}" class="uactive"></div>
+				<div th:if="${data.userStatus == 'INACTIVE'}" class="uinactive"></div>
+			</div>
+			<p class="role" th:text="${data.role}"></p>
+			<img class="userImage" th:src="'https://api.dicebear.com/5.x/initials/svg?seed='+${data.userName}+''"
+				 alt="">
+			<div class="userInfo">
+				<div class="userInfoText">
+					<div>
+						<ion-icon name="person-outline"></ion-icon>
+						<p th:text="${data.userName}"></p>
+					</div>
+					<div>
+						<ion-icon name="key-outline"></ion-icon>
+						<p th:text="${data.userCode}"></p>
+					</div>
+					<div>
+						<ion-icon name="mail-outline"></ion-icon>
+						<p th:text="${data.userEmail}"></p>
+					</div>
+					<div>
+						<ion-icon name="phone-portrait-outline"></ion-icon>
+						<p th:text="${data.userMobile}"></p>
+					</div>
+				</div>
+			</div>
+			<div class="userInfoFooter" th:if="${data.role != 'ADMIN'}">
+				<a th:if="${data.userStatus == 'ACTIVE'}"
+				   th:onclick="generateBanForm([[${keyword}]],[[${data.userId}]],[[${data.userName}]],'ACTIVE');">
+					<span>Заблокировать</span>
+				</a>
+				<a th:if="${data.userStatus == 'INACTIVE'}"
+				   th:onclick="generateBanForm([[${keyword}]],[[${data.userId}]],[[${data.userName}]],'INACTIVE');">
+					<span>Активировать</span>
+				</a>
+				<button
+						th:onclick="generateUpdateRoleForm([[${keyword}]],[[${data.userCode}]],[[${data.userId}]],[[${data.role}]]);">Изменить
+					должность
+				</button>
+			</div>
+		</div>
+	</div>
+
+</section>
+</body>
+
+</html>

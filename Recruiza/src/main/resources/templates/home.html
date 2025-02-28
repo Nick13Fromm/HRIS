@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+	<meta charset="UTF-8">
+	<title>Главная</title>
+	<div th:insert="../components/nav :: tags"></div>
+</head>
+
+<body>
+<div th:insert="../components/nav :: navBar"></div>
+
+<div class="jobPostSection">
+
+	<form class="searchForm" th:action="@{/searchPostedJobPost}" method="post">
+
+		<h2>Вакансии</h2>
+		<input type="text" name="keyword" th:value="${keyword}" placeholder="Введите ключевое слово" />
+
+		<div>
+			<input type="date" name="startDate" th:value="${startDate}" />
+			<input type="date" name="endDate" th:value="${endDate}" />
+		</div>
+
+		<button type="submit">
+			<ion-icon name="search-outline"></ion-icon>
+		</button>
+		<button>
+			<a th:href="@{/home}">
+				<ion-icon name="refresh-outline"></ion-icon>
+			</a>
+		</button>
+	</form>
+
+	<div class="pendingPostSection">
+		<div class="jobPostsCantainer">
+			<p class="no-data" th:if="${jobPosts.size() == 0}">
+				вакансии не найдены
+			</p>
+			<div class="data-card jobPostCardo" th:each="jp : ${jobPosts}">
+
+				<img class="backImage" th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${jp.postCode}+''"
+					 alt="">
+
+				<input type="hidden" th:class="J+${jp.postId}" th:value="${jp.postName}">
+				<div class="data-card-head">
+					<div>
+						<div class="data-status" th:switch="${jp.postStatus}">
+							<p th:case="'CLOSED'" class="closed">ЗАКРЫТО</p>
+							<p th:case="'DUED'" class="dued">СРОК ИСТЕК</p>
+							<p th:case="'POSTED'" class="posted">ОТКРЫТО</p>
+							<p th:case="*" class="none">НЕТ</p>
+						</div>
+						<div title="Бесплатно" class="focyes" th:if="${jp.foc == true}"></div>
+						<div title="Платно" class="focno" th:if="${jp.foc == false}"></div>
+					</div>
+
+					<p class="data-code" th:text="${jp.postCode}"></p>
+				</div>
+				<div class="jobPostInfo">
+					<p>
+						<span>Название</span> <span th:text="${jp.postName}"></span>
+					</p>
+					<p>
+						<span>Должность</span><span th:text="${jp.jobPosition.positionName}"></span>
+					</p>
+					<p>
+						<span>Комментарий</span> <span th:text="${jp.comment}"></span>
+					</p>
+					<div>
+						<p>
+							<span>Команда</span>
+							<span th:text="${jp.team.teamName}"></span>
+						</p>
+						<p>
+							<span>Отдел</span>
+							<span th:text="${jp.team.department.departmentName}"></span>
+						</p>
+					</div>
+					<div>
+						<p>
+							<span>Дата начала</span>
+							<span th:text="${jp.postDate}"></span>
+						</p>
+						<p>
+							<span>Дата окончания</span>
+							<span th:text="${jp.dueDate}"></span>
+						</p>
+					</div>
+				</div>
+				<div class="data-card-footer">
+					<div>
+						<div>
+							<span>Необходимо - </span>
+							<p class="jobPostCount" th:text="${jp.count}"></p>
+						</div>
+					</div>
+					<div class="data-buttons">
+						<div>
+							<a th:onclick="retrieveSheetData([[${jp.sheetId}]],[[${jp.postId}]]);">
+								<ion-icon name="checkmark-done-outline"></ion-icon>Получить данные
+							</a>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+</div>
+<div class="applicantSection">
+	<div class="applicantBox">
+		<h3 class="titleForApplicants">Нет данных</h3>
+		<div class="applicantContainer">
+			<div class="applicantsLoading">
+				<ion-icon name="cloud-download-outline"></ion-icon>
+			</div>
+			<!-- Здесь генерируется карточка соискателя -->
+		</div>
+	</div>
+</div>
+
+<!-- <div class="addApplicantBox">
+    <form class="addApplicant">
+        <h2>Добавить соискателя</h2>
+        <div>
+            <div>
+                <input data-name="Name" type="text" value="" placeholder="Имя" required="required">
+                <input data-name="Email" type="email" value="" placeholder="Email" required="required">
+                <input data-name="Mobile" type="number" value="" placeholder="Телефон" required="required">
+                <input data-name="Address" type="text" value="" placeholder="Адрес" required="required">
+            </div>
+            <div>
+                <textarea data-name="link" cols="30" rows="2" placeholder="ссылка" readonly="readonly"></textarea>
+                <input type="file" name="" id="" required="required">
+                <textarea data-name="comment" cols="30" rows="4" placeholder="Комментарий"></textarea>
+            </div>
+        </div>
+        <input type="submit" value="Добавить в базу данных">
+    </form>
+    <div class="backgroundExit" onclick=""></div>
+</div> -->
+</body>
+
+</html>

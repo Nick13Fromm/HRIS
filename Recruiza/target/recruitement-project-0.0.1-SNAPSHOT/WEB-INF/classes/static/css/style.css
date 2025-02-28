@@ -1,0 +1,3841 @@
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Freehand&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Tilt Neon', cursive;
+    transition: .5s ease-in-out;
+    color: var(--fontColor);
+}
+
+:root {
+    --mainColor: white;
+    --secondaryColor: #378eea;
+    --fontColor: #2c2c2c;
+    --fontSecondary: #8f8f8f;
+    --background: #ffffff;
+    --boxColor: #378eea;
+    --shadowColor: rgba(0, 0, 0, 0.2);
+    --errorColor: tomato;
+    /* nav */
+    --color-nav: #644c89;
+    --color-nav-active: #fff;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--background);
+    flex-direction: column;
+}
+
+ion-icon {
+    pointer-events: none;
+}
+
+.back_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: var(--secondaryColor);
+    width: 40px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    border: 0;
+    box-shadow: 0 0 10px var(--shadowColor);
+    font-size: larger;
+    z-index: 1000;
+}
+
+.box {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: 420px;
+    background: var(--background);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 20px var(--shadowColor);
+}
+
+.box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 350px;
+    height: 420px;
+    transform-origin: bottom right;
+    background: linear-gradient(0deg, transparent, var(--secondaryColor), var(--secondaryColor));
+    animation: animate 6s linear infinite;
+}
+
+.box::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 350px;
+    height: 420px;
+    transform-origin: bottom right;
+    background: linear-gradient(0deg, transparent, var(--secondaryColor), var(--secondaryColor));
+    animation: animate 6s linear infinite;
+    animation-delay: -3s;
+}
+
+.loginform {
+    position: absolute;
+    inset: 2px;
+    background: var(--background);
+    z-index: 10;
+    border-radius: 8px;
+    padding: 50px 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.loginform h2 {
+    color: var(--fontColor);
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0.1em;
+}
+
+.inputBox {
+    position: relative;
+    margin-top: 35px;
+}
+
+.inputBox>input {
+    position: relative;
+    width: 100%;
+    padding: 20px 10px 10px;
+    background: transparent;
+    border: none;
+    color: var(--fontColor);
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    outline: none;
+    z-index: 10;
+}
+
+.inputBox span {
+    position: absolute;
+    left: 0;
+    padding: 20px 10px;
+    font-size: 1em;
+    color: var(--fontSecondary);
+    pointer-events: none;
+    letter-spacing: 0.05em;
+    transition: 0.5s;
+}
+
+.inputBox input:valid~span,
+.inputBox input:focus~span {
+    color: var(--fontColor);
+    transform: translateX(-10px) translateY(-34px);
+    font-size: 0.75em;
+}
+
+.inputBox i {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--secondaryColor);
+    border-radius: 4px;
+    transition: 0.5s;
+    pointer-events: none;
+    z-index: 9;
+}
+
+.inputBox input:valid~i,
+.inputBox input:focus~i {
+    height: 44px;
+}
+
+.links {
+    display: flex;
+    justify-content: space-between;
+}
+
+.links a {
+    margin: 10px 0;
+    font-size: 0.75em;
+    color: var(--fontSecondary);
+    text-decoration: none;
+}
+
+.links a:hover {
+    color: var(--fontColor);
+}
+
+.box input[type=submit] {
+    border: none;
+    outline: none;
+    background: var(--secondaryColor);
+    padding: 10px 25px;
+    margin-top: 30px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--background);
+}
+
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.errornoti {
+    position: fixed;
+    top: 10px;
+    color: var(--fontColor);
+    /* width: 200px; */
+    background: var(--background);
+    box-shadow: 0 0 10px var(--shadowColor);
+    padding: 10px 20px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+
+    transform: translateY(1000px);
+    animation: erorpop 20s ease-in-out;
+    z-index: 1000;
+}
+/* 
+.errornoti::before {
+    content: 'Message';
+    position: absolute;
+    left: -5px;
+    top: -20px;
+    color: white;
+    border: 1px solid var(--shadowColor);
+    background: var(--shadowColor);
+    border-radius: 10px 10px 0 0;
+    width: 100%;
+} */
+
+.errornoti:empty {
+    display: none;
+}
+
+@keyframes erorpop {
+
+    5%,
+    99% {
+        transform: translateY(0);
+    }
+
+    0%,
+    100% {
+        transform: translateY(-100px);
+    }
+}
+
+/* hamburger */
+.hamburgerBox {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 5px;
+}
+
+.hamburgerBox a {
+    text-decoration: none;
+}
+
+/* Nav Bar */
+.navbarDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 70px;
+    z-index: 999;
+}
+
+.hamburger {
+    position: absolute;
+    display: none;
+    top: 0;
+    right: 35%;
+    font-size: 1.5em;
+    cursor: pointer;
+    background: var(--secondaryColor);
+    padding: 10px 10px 5px 30px;
+    border-radius: 0 0 20px 0;
+    transition: .4s cubic-bezier(0.375, 0.885, 0.32, 1.275);
+    color: white;
+}
+
+.hamburgermove {
+    right: -75%;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 70px;
+    background: var(--background);
+    box-shadow: 10px 0 0 var(--secondaryColor);
+    overflow-x: hidden;
+    transition: .5s cubic-bezier(0.375, 0.885, 0.32, 1.275);
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: column;
+
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+nav::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.jobPostsCantainer::-webkit-scrollbar {
+    display: none;
+}
+
+.navhide {
+    transform: translateX(-105%);
+}
+
+.logo {
+    position: absolute;
+    top: 10px;
+    font-size: 2em;
+    color: var(--secondaryColor);
+}
+
+nav:hover {
+    width: 200px;
+}
+
+nav ul {
+    position: relative;
+    width: 100%;
+    padding-left: 5px;
+}
+
+nav ul li {
+    position: relative;
+    list-style: none;
+    width: 100%;
+    border-radius: 40px 0 0 40px;
+}
+
+nav ul li:hover a {
+    color: var(--secondaryColor);
+}
+
+nav ul li.active:hover a {
+    color: var(--background);
+}
+
+nav ul li.active {
+    background: var(--secondaryColor);
+}
+
+nav ul li.active a::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background: var(--background);
+    border-radius: 50px;
+    box-shadow: 15px 15px 0 var(--secondaryColor);
+}
+
+nav ul li.active a::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background: var(--background);
+    border-radius: 50px;
+    box-shadow: 15px -15px 0 var(--secondaryColor);
+}
+
+nav ul li a {
+    position: relative;
+    display: block;
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: var(--fontColor);
+}
+
+nav ul li a .icon {
+    position: relative;
+    display: block;
+    min-width: 60px;
+    height: 60px;
+    line-height: 70px;
+    text-align: center;
+}
+
+nav ul li a .icon ion-icon {
+    position: relative;
+    font-size: 1.5em;
+    z-index: 1;
+}
+
+nav ul li a .title {
+    position: relative;
+    display: block;
+    padding-left: 10px;
+    height: 60px;
+    line-height: 60px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+nav ul li.active a .icon ion-icon {
+    color: var(--background);
+}
+
+
+.confirmationModal {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+@keyframes loadIn {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.confirmationModal button {
+    width: 45px;
+    height: 45px;
+    background: tomato;
+    border: 2px solid white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    position: absolute;
+    right: 10px;
+    top: -20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: 0.5s ease-in-out;
+}
+
+.confirmationModal button:hover {
+    transform: rotate(90deg);
+}
+
+.backgroundExit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 11;
+    background-color: var(--shadowColor);
+    backdrop-filter: blur(10px);
+}
+
+.confirmationModal .modalBox {
+    position: relative;
+    color: var(--fontColor);
+    z-index: 12;
+    background-color: var(--color-nav-active);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+
+    padding: 40px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    animation: loadIn 0.5s linear;
+}
+
+.confirmationModal .modalBox .modalButtonBox {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+}
+
+.confirmationModal .modalBox .modalButtonBox a {
+    text-decoration: none;
+    background-color: var(--secondaryColor);
+    padding: 10px 20px;
+    height: auto;
+    width: 50%;
+    color: var(--fontColor);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    overflow: hidden;
+    border: 2px solid transparent;
+}
+
+.confirmationModal .modalBox .modalButtonBox a ion-icon {
+    position: absolute;
+    color: white;
+    opacity: 0;
+    transform: scale(3) translateX(10px);
+    transition: 0.5s ease-in-out;
+}
+
+.confirmationModal .modalBox .modalButtonBox a:hover ion-icon {
+    opacity: 0.75;
+    transform: scale(5) translateX(7px);
+}
+
+.confirmationModal .modalBox .modalButtonBox a:nth-child(1) {
+    background-color: tomato;
+}
+
+.confirmationModal .modalBox .modalButtonBox a:nth-child(2) {
+    background-color: lightgreen;
+}
+
+.modalBox h2 {
+    position: absolute;
+    background: var(--secondaryColor);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 10px;
+    top: -20px;
+    left: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.modalBox p {
+    width: 300px;
+}
+
+/* Side Resources */
+.sideResources {
+    background: var(--secondaryColor);
+    position: fixed;
+    right: 0px;
+    min-height: 30%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 30px;
+    gap: 10px;
+    bottom: 10px;
+    transform: translateX(100%);
+    transition: .5s cubic-bezier(0.375, 0.885, 0.32, 1.275);
+    z-index: 1000;
+}
+
+.sideResources::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 100px;
+    background: var(--secondaryColor);
+    bottom: 30px;
+    left: -30px;
+    border-radius: 20px 0 0 20px;
+    transition: .5s cubic-bezier(0.375, 0.885, 0.32, 1.275);
+}
+
+.sideResources:hover {
+    transform: translateX(0);
+}
+
+.sideResources:hover::before {
+    transform: translateX(100%);
+}
+
+.resource {
+    position: relative;
+    background: var(--background);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-decoration: none;
+    padding: 10px;
+    color: var(--fontColor);
+    transition: .5s cubic-bezier(0.375, 0.885, 0.32, 1.275);
+}
+
+.resource ion-icon {
+    font-size: 2em;
+    transition: .5s cubic-bezier(0.375, 0.885, 0.32, 1.275);
+}
+
+.resource::before {
+    content: attr(data-name);
+    position: absolute;
+    font-size: 1.2em;
+    right: 40%;
+    background: var(--boxColor);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 50px 0 20px;
+    transform: translate(0);
+    border-radius: 25px;
+    opacity: 0;
+    border: 3px solid var(--secondaryColor);
+    transform: translateX(50px) scaleX(0);
+    transform-origin: right;
+    transition: .5s cubic-bezier(0.375, 0.885, 0.32, 1.275);
+}
+
+.resource:hover::before {
+    opacity: 1;
+    transform: translateX(20px) scaleX(1);
+}
+
+.resource:hover ion-icon {
+    transform: translateX(1px);
+}
+
+.resource:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Add form */
+.addForm,.addNewApplicantForm {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateX(100%) scaleX(0);
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .5s ease-in-out;
+}
+
+.updateform,
+.updateUserform {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .5s ease-in-out;
+    flex-direction: column;
+    animation: loadIn 0.5s linear;
+}
+
+.addForm.show,.addNewApplicantForm.show {
+    transform: translateX(0) scaleX(1);
+}
+
+.addForm>form,
+.updateform>form,
+.updateUserform>form,
+.addNewApplicantForm>form {
+    position: relative;
+    z-index: 1000;
+    background: var(--background);
+    padding: 50px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-direction: column;
+    padding-bottom: 100px;
+    box-shadow: 0 0 20px var(--shadowColor);
+}
+
+.addForm>form::before,
+.updateform>form::before,
+.updateUserform>form::before,
+.addNewApplicantForm>form::before {
+    content: attr(data-formName);
+    position: absolute;
+    top: -20px;
+    font-size: 1.5em;
+    background: var(--secondaryColor);
+    padding: 10px 20px;
+    left: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px var(--shadowColor);
+    color: #fff;
+}
+
+.addForm>form>div,
+.updateform>form>div,
+.updateUserform>form>div {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+.addForm>form>div>input,
+.addForm textarea,
+.addForm>form>div>select,
+.updateform>form>div>input,
+.updateform>form>div>select,
+.updateform>form>div>button,
+.updateUserform>form input,
+.updateUserform>form>div>select,
+.updateUserform>form>div>button {
+    width: 300px;
+    height: 35px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 0px 10px;
+    border-radius: 10px;
+    background: var(--background);
+}
+
+.updateform>form>.actionBox,
+.updateUserform>form>.actionBox {
+    padding-top: 0;
+}
+
+.updateform>form>div>input[type=submit],
+.updateform>form>div>button,
+.updateUserform>form input[type=submit],
+.updateUserform>form>div>button {
+    background: var(--secondaryColor);
+    color: white;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+
+.updateUserform>form>a {
+    text-decoration: none;
+    width: 100%;
+    border-radius: 10px;
+    text-align: center;
+    height: 35px;
+    background: var(--secondaryColor);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addForm>form>div>label,
+.updateform>form>div>label,
+.updateUserform>form>div>label {
+    position: absolute;
+    width: 50%;
+    padding: 3px 5px;
+    top: -7px;
+    left: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+}
+
+.addForm>form>div:last-child {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.addForm>form>div:last-child>ion-icon {
+    position: absolute;
+    font-size: 10em;
+    color: var(--fontColor);
+    right: 0;
+    transform: scale(0);
+    transition: 0.5s ease-in-out;
+}
+
+.addForm>form>div:last-child:hover ion-icon {
+    transform: scale(1);
+}
+
+.addForm>form>div:last-child>input {
+    background: var(--secondaryColor);
+    color: #ffffff;
+}
+
+.deleteBox {
+    transform: translateY(-85px);
+    z-index: 1001;
+}
+
+.deleteBox>button {
+    width: 300px;
+    height: 35px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background: var(--secondaryColor);
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.background {
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    backdrop-filter: blur(5px);
+}
+
+
+/* .table  */
+.tableBox {
+    position: absolute;
+    width: 85%;
+    height: 100%;
+    background: var(--background);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-direction: column;
+}
+
+.searchBox {
+    background: var(--secondaryColor);
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    justify-content: space-between;
+}
+
+.searchBox>h2 {
+    color: #fff;
+}
+
+.searchBox form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.searchBox>form>* {
+    border: 0;
+    text-decoration: none;
+    border-radius: 8px;
+    background: var(--background);
+    padding: 5px 10px;
+    height: 30px;
+    font-size: 1em;
+    color: var(--fontColor);
+    margin-left: 5px;
+    outline: 0;
+    box-shadow: 0 0 10px var(--shadowColor);
+}
+
+.searchBox>form>input[type=submit] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* data table box */
+.data-table-box {
+    margin-top: 60px;
+    width: 100%;
+    height: 80%;
+    overflow: hidden;
+    animation: loadtable 1s linear;
+}
+
+@keyframes loadtable {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.data-table-row {
+    display: flex;
+    background-color: var(--background);
+    border-bottom: 1px solid #00000020;
+}
+
+.data-table-row:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.data-table-row:nth-child(1) {
+    background: var(--secondaryColor);
+    border-radius: 10px 10px 0 0;
+    color: #ffffff;
+}
+
+.data-table-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    padding: 7px 20px;
+}
+
+.data-table-col:first-child {
+    width: 10%;
+}
+
+.data-table-col:last-child {
+    width: 13%;
+}
+
+.action-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-decoration: none;
+    background: var(--secondaryColor);
+    height: 30px;
+    padding: 5px 20px;
+    border-radius: 5px;
+    color: #fff;
+    box-shadow: 0 0 5px var(--shadowColor);
+    transition: 1s ease-in-out;
+}
+
+.action-button::before,
+.action-button::after {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 70%;
+    height: 100%;
+    opacity: 1;
+    transform-origin: top;
+    transform: rotateX(90deg);
+    transition: .5s ease-in-out;
+    color: #fff;
+}
+
+.action-button::before {
+    content: 'Update';
+    background: cornflowerblue;
+    right: 50%;
+    border-radius: 5px 0 0 5px;
+}
+
+.action-button::after {
+    content: 'Delete';
+    background: tomato;
+    left: 50%;
+    border-radius: 0 5px 5px 0;
+}
+
+.action-button:hover {
+    background: transparent;
+    color: transparent;
+}
+
+.action-button:hover::before,
+.action-button:hover::after {
+    opacity: 1;
+    transform: rotateX(0);
+}
+
+.sort-button {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    color: white;
+    cursor: s-resize;
+}
+
+/* Pagination */
+.pagination {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pagenum {
+    background: var(--secondaryColor);
+    font-weight: bolder;
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.pagenum div {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.page-reference {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.page-reference a ion-icon,
+.page-reference span ion-icon {
+    transform: translateY(3px);
+    font-size: 1.5em;
+}
+
+.deleteConfirmationModal {
+    z-index: 100;
+    background: #17171720;
+}
+
+.userAccount {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+/* Profile Container */
+.profileContainer {
+    position: relative;
+    padding: 10px 0;
+    width: 85%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.profileBox {
+    position: relative;
+    background: transparent;
+    padding: 20px 20px 20px 20px;
+    border-radius: 20px;
+    width: 100%;
+    min-height: 282px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.profileBox:nth-child(2),
+.profileBox:nth-child(3) {
+    background: var(--background);
+}
+
+.profileBox>form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profileBox>p,
+.profileBox>form>input {
+    width: 65%;
+    border-radius: 20px;
+    padding: 5px 20px;
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.profileBox>p::before,
+.profileBox>form>input::before {
+    position: absolute;
+    content: attr(data-name);
+    top: -60%;
+    left: 5px;
+    padding: 3px 10px;
+    font-size: 0.75em;
+}
+
+.profileBox>button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.2em;
+    border: 0;
+    background: var(--secondaryColor);
+    color: #ffffff;
+}
+
+.profileBox>button:nth-child(3) {
+    top: 60%;
+    height: 80px;
+    width: 80px;
+    background: var(--background);
+    border-radius: 10px;
+    border: 1px solid var(--secondaryColor);
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.profileBox>button:nth-child(3):hover {
+    background: var(--secondaryColor);
+    border: 1px solid var(--background);
+}
+
+.profileBox>button:nth-child(3):hover p {
+    color: var(--background);
+}
+
+.profileBox>button:nth-child(3)>p {
+    /* writing-mode: vertical-lr;
+    text-orientation: upright;
+    text-align: start; */
+    font-size: 1em;
+}
+
+.profileBox>img {
+    position: absolute;
+    width: 100px;
+    bottom: 10px;
+    right: 10px;
+}
+
+.profileBox:nth-child(2) {
+    position: absolute;
+}
+
+.profileBox:nth-child(3) {
+    position: absolute;
+    width: 35%;
+    right: 0;
+}
+
+.profileBox:nth-child(3)>form>* {
+    width: 100%;
+}
+
+.profileBox:nth-child(3)>button {
+    width: 100%;
+    height: 30px;
+    position: relative;
+    border-radius: 30px;
+    transform: translateX(10px);
+}
+
+.movetop {
+    transform: translateY(110%);
+}
+
+.moveright {
+    transform: translateX(100%);
+}
+
+.historyContainer {
+    width: 85%;
+    min-height: 300px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+    padding: 30px 10px;
+}
+
+.historyRow {
+    position: relative;
+    width: 95%;
+    padding: 10px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.historyRow>h5 {
+    position: absolute;
+    top: -20px;
+    right: 10px;
+    background: var(--secondaryColor);
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 5px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.historyContainer>h2 {
+    width: 95%;
+    text-align: left;
+}
+
+.userAccount>h2 {
+    width: 80%;
+    margin-bottom: 10px;
+}
+
+/* Job Post */
+.jobPost,
+.jobPostHeader,
+.dateContainer,
+.jobPostComment,
+.jobPostFooter {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.jobPostSection,.data-section{
+    padding: 20px;
+    padding-left: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.jobPostSection{
+    min-height: 400px;
+}
+
+.data-section{
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+
+.applicantSection {
+    width: 100%;
+    height: 100vh;
+    /* background: var(--secondaryColor); */
+}
+
+.jobPostSearch {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 87%;
+    background: var(--secondaryColor);
+    padding: 5px 20px;
+    border-radius: 10px;
+}
+
+.jobPostSearch>h2 {
+    color: #fff;
+}
+
+.jobPostSearch>div {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    flex-wrap: wrap;
+    flex-grow: 1;
+}
+
+.jobPostSearch>div>form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.jobPostSearch>div>form>div:last-child {
+    display: flex;
+    gap: 5px;
+}
+
+.jobPostSearch>div>form input,
+.jobPostSearch>div>form button {
+    text-decoration: none;
+    background: var(--background);
+    padding: 5px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.jobPostSearch>div>form button a {
+    text-decoration: none;
+}
+
+
+.jobPostSearch>div>* {
+    background: var(--background);
+    padding: 5px 20px;
+    border: 0;
+    border-radius: 10px;
+}
+
+.jobPostSearch>div>input[type=submit]:hover {
+    color: var(--secondaryColord);
+    cursor: pointer;
+}
+
+.jobPostContainer {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 325px;
+    overflow: hidden;
+    overflow-x: scroll;
+}
+
+.jobPostContainer::-webkit-scrollbar {
+    /* display: none; */
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.jobPost {
+    position: relative;
+    width: 275px;
+    height: 300px;
+    overflow: hidden;
+}
+
+.jobPost::before {
+    position: absolute;
+    content: '';
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: var(--secondaryColor);
+    border-radius: 50%;
+    left: 40%;
+    top: 50%;
+    opacity: 5%;
+    z-index: -5;
+    transition: .5s cubic-bezier(0.375, 0.885, 0.32, 1.275);
+}
+
+.jobPost:hover::before {
+    top: 80%;
+    left: 0;
+    transform: scale(1.2);
+}
+
+.dateContainer {
+    margin-top: 5px;
+    padding: 3px 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.dateContainer>span {
+    background: var(--secondaryColor);
+    padding: 0 10px;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+.jobPostComment {
+    margin-top: 15px;
+    height: 135px;
+    position: relative;
+
+}
+
+.jobPostComment::before {
+    content: 'Comment';
+    position: absolute;
+    top: -15px;
+    background: var(--background);
+    padding: 3px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.jobPostFooter {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.jobPostFooter>p,
+.jobPostFooter>p>span {
+    font-size: 0.95em;
+    font-family: 'Freehand', cursive;
+}
+
+.jobPostFooter>button {
+    padding: 0 10px;
+    border-radius: 10px;
+    border: 0;
+}
+
+.jobPostFooter>button:hover {
+    cursor: pointer;
+    color: var(--fontColor);
+    background: var(--secondaryColor);
+}
+
+.loader-box {
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: var(--secondaryColor);
+    gap: 50px;
+    z-index: 100000;
+}
+
+.loader-box>h2 {
+    color: #fff;
+}
+
+.loader {
+    position: relative;
+    width: 350px;
+    height: 350px;
+    transform-style: preserve-3d;
+    transform: perspective(500px) rotateX(60deg);
+}
+
+.ring {
+    position: absolute;
+    display: block;
+    border: 5px solid #fff;
+    box-sizing: border-box;
+    border-radius: 50%;
+    animation: animateRing 3s ease-in-out infinite;
+}
+
+.jobPostSection>.pendingPostSection {
+    padding: 0;
+    animation: loadIn 0.5s linear;
+}
+
+@keyframes animateRing {
+
+    0%,
+    100% {
+        transform: translateZ(-100px);
+    }
+
+    50% {
+        transform: translateZ(100px);
+    }
+}
+
+.ring:nth-child(1) {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    animation-delay: 1.4s;
+}
+
+.ring:nth-child(2) {
+    top: 10px;
+    left: 10px;
+    bottom: 10px;
+    right: 10px;
+    animation-delay: 1.3s;
+}
+
+.ring:nth-child(3) {
+    top: 20px;
+    left: 20px;
+    bottom: 20px;
+    right: 20px;
+    animation-delay: 1.2s;
+}
+
+.ring:nth-child(4) {
+    top: 30px;
+    left: 30px;
+    bottom: 30px;
+    right: 30px;
+    animation-delay: 1.1s;
+}
+
+.ring:nth-child(5) {
+    top: 40px;
+    left: 40px;
+    bottom: 40px;
+    right: 40px;
+    animation-delay: 1s;
+}
+
+.ring:nth-child(6) {
+    top: 50px;
+    left: 50px;
+    bottom: 50px;
+    right: 50px;
+    animation-delay: 0.9s;
+}
+
+.ring:nth-child(7) {
+    top: 60px;
+    left: 60px;
+    bottom: 60px;
+    right: 60px;
+    animation-delay: 0.8s;
+}
+
+.ring:nth-child(8) {
+    top: 70px;
+    left: 70px;
+    bottom: 70px;
+    right: 70px;
+    animation-delay: 0.7s;
+}
+
+.ring:nth-child(9) {
+    top: 80px;
+    left: 80px;
+    bottom: 80px;
+    right: 80px;
+    animation-delay: 0.6s;
+}
+
+.ring:nth-child(10) {
+    top: 90px;
+    left: 90px;
+    bottom: 90px;
+    right: 90px;
+    animation-delay: 0.5s;
+}
+
+.ring:nth-child(11) {
+    top: 100px;
+    left: 100px;
+    bottom: 100px;
+    right: 100px;
+    animation-delay: 0.4s;
+}
+
+.ring:nth-child(12) {
+    top: 110px;
+    left: 110px;
+    bottom: 110px;
+    right: 110px;
+    animation-delay: 0.3s;
+}
+
+.loader>span:nth-child(13) {
+    top: 120px;
+    left: 120px;
+    bottom: 120px;
+    right: 120px;
+    animation-delay: 0.2s;
+}
+
+.ring:nth-child(14) {
+    top: 130px;
+    left: 130px;
+    bottom: 130px;
+    right: 130px;
+    animation-delay: 0.1s;
+}
+
+.ring:nth-child(15) {
+    top: 140px;
+    left: 140px;
+    bottom: 140px;
+    right: 140px;
+    animation-delay: 0s;
+}
+
+.applicantSection {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.applicantBox {
+    width: 86%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 10px 0;
+}
+
+.applicantBox>h3 {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.applicantBox>h3>span {
+    background: var(--secondaryColor);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.applicantContainer {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    gap: 7.5px;
+}
+.applicantContainer>.applicard{
+    width: 360px;
+    height: auto;
+    padding-bottom: 60px;
+}
+.applicantContainer>.applicard>img{
+    width: 15%;
+}
+.applicantContainer>.applicard>.applicantInformation{
+    margin: 0;
+}
+
+.applicantCard {
+    position: relative;
+    background: var(--background);
+    width: 270px;
+    height: 300px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transform: translateX(0px);
+    opacity: 1;
+    animation: loadinbox var(--i) linear;
+}
+
+.applicantsource {
+    position: absolute;
+    top: 10px;
+    left: 8px;
+    background: var(--background);
+    padding: 5px 10px;
+    border-radius: 0 0 10px 0;
+    color: var(--secondaryColor);
+}
+
+@keyframes loadinbox {
+    0% {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0px);
+        opacity: 1;
+    }
+}
+
+.applicantCard>* {
+    z-index: 5;
+}
+
+.applicantCard>img {
+    position: absolute;
+    width: 250px;
+    z-index: 2;
+    top: 10px;
+    border-radius: 10px;
+    opacity: 0.5;
+}
+
+.applicantCard:hover .applicantInfo {
+    bottom: 0;
+}
+
+.applicantInfo {
+    position: absolute;
+    background: var(--background);
+    width: 100%;
+    padding: 10px;
+    border-radius: 0 50px 0 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    bottom: -195px;
+}
+
+.applicantInfo>* {
+    padding: 3px;
+}
+
+.applicantInfo h3 {
+    margin-bottom: 10px;
+}
+
+.applicantInfo p {
+    padding: 5px 10px;
+}
+
+.applicantInfo p:nth-child(4) ion-icon {
+    font-size: 1.5em;
+}
+
+.applicantInfo p:nth-child(2),
+.applicantInfo p:nth-child(3),
+.applicantInfo p:nth-child(4) {
+    background: #65656520;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.applicantInfo p:nth-child(4) {
+    height: 100px;
+}
+
+.applicantButtonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.applicantButtonContainer>a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    background: var(--secondaryColor);
+    width: 50%;
+    border-radius: 10px;
+    padding: 5px;
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--secondaryColor);
+    width: 100vw;
+    height: 100vh;
+}
+
+.error-container h3:nth-child(1) {
+    text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 0 3px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 30px;
+    font-size: 2.5em;
+    color: #fff;
+}
+
+.container {
+    position: relative;
+    top: 50px;
+    transform: scale(0.7);
+}
+
+.cup {
+    position: relative;
+    width: 280px;
+    height: 300px;
+    background: linear-gradient(to right, #f9f9f9, #d9d9d9);
+    border-bottom-left-radius: 45%;
+    border-bottom-right-radius: 45%;
+}
+
+.top {
+    position: absolute;
+    top: -30px;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(to right, #f9f9f9, #d9d9d9);
+    border-radius: 50%;
+}
+
+.circle {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    width: calc(100% - 20px);
+    height: 50px;
+    background: linear-gradient(to left, #f9f9f9, #d9d9d9);
+    border-radius: 50%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.tea {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(#c57e65, #e28462);
+    border-radius: 50%;
+
+}
+
+.handle {
+    position: absolute;
+    right: -70px;
+    top: 40px;
+    width: 160px;
+    height: 180px;
+    border: 25px solid #dcdcdc;
+    border-left: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+    border-radius: 50%;
+    transform: rotate(42deg);
+}
+
+.plate {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    height: 200px;
+    background: linear-gradient(to right, #f9f9f9, #e7e7e7);
+    border-radius: 50%;
+    box-shadow: 0 35px 35px rgba(0, 0, 0, 0.2);
+}
+
+.plate::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border-radius: 50%;
+    background: linear-gradient(to left, #f9f9f9, #e7e7e7);
+}
+
+.plate::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    background: radial-gradient(rgba(0, 0, 0, 0.2) 25%, transparent, transparent);
+    border-radius: 50%;
+}
+
+.vapour {
+    position: relative;
+    display: flex;
+    z-index: 1;
+    padding: 0 20px;
+}
+
+.vapour span {
+    position: relative;
+    bottom: 50px;
+    display: block;
+    margin: 0 2px 50px;
+    min-width: 8px;
+    height: 120px;
+    background: #fff;
+    border-radius: 50%;
+    animation: animateSmoke 5s linear infinite;
+    opacity: 0;
+    filter: blur(8px);
+    animation-delay: calc(var(--i) * -0.5s);
+}
+
+@keyframes animateSmoke {
+    0% {
+        transform: translateY(0) scaleX(1);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(-150px) scaleX(5);
+    }
+
+    95% {
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(-300px) scaleX(10);
+    }
+}
+
+.error-page-button {
+    position: relative;
+    top: 60px;
+    background-color: #fff;
+    padding: 10px 15px;
+    border: 2px solid #597a8b;
+    border-radius: 10px;
+}
+
+.error-page-button a {
+    text-decoration: none;
+    color: var(--fontColor);
+}
+
+.take-break {
+    text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 0 3px rgba(0, 0, 0, 0.2);
+    position: relative;
+    top: 50px;
+    font-size: 2.5em;
+    color: #fff;
+}
+
+/* setting checkBox */
+.checkBoxContainer {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.checkBoxContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.user-update-new-data-form {
+    position: fixed;
+    top: 0;
+    background: var(--secondaryColor);
+    padding: 10px 50px;
+    transform: scale(0);
+    transform-origin: top;
+
+}
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: var(--background);
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.checkBoxContainer:hover input~.checkmark {
+    background-color: var(--background);
+}
+
+/* When the radio button is checked, add a blue background */
+.checkBoxContainer input:checked~.checkmark {
+    background-color: var(--secondaryColor);
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.checkBoxContainer input:checked~.checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.checkBoxContainer .checkmark:after {
+    top: 9px;
+    left: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+
+.settingBox {
+    position: fixed;
+    right: 0;
+    top: 0;
+    padding: 0px 0px;
+    border-radius: 0 0 0 10px;
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(90%);
+}
+
+.settingBox:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transform: translateX(10%);
+}
+
+.settingBox>ion-icon {
+    position: absolute;
+    left: 10px;
+    font-size: 1.5em;
+    color: var(--secondaryColor);
+}
+
+.themeBox {
+    display: flex;
+    gap: 10px;
+    transform: scale(0.7) translateY(5px);
+}
+
+.form-hider {
+    transform: scale(1);
+
+}
+
+.addApplicantBox {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+}
+
+.addApplicant {
+    position: absolute;
+    z-index: 21;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--background);
+    padding: 30px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px var(--shadowColor);
+}
+
+.addApplicant>* {
+    width: 100%;
+}
+
+.addApplicant>div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.addApplicant>div>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.addApplicant>div>div>* {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    min-height: 20px;
+    padding: 10px 20px;
+    width: 300px;
+}
+
+.addApplicant>div>div:last-child>* {
+    width: 400px;
+}
+
+.addApplicant>*:first-child,
+.addApplicant>*:last-child {
+    position: relative;
+    padding: 10px 20px;
+    background: var(--secondaryColor);
+    color: var(--background);
+}
+
+.addApplicant input[type=submit] {
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.addApplicant input[type=file] {
+    position: relative;
+    height: 45px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.addApplicant>iframe {
+    position: absolute;
+    z-index: 30;
+}
+
+.addApplicant textarea {
+    resize: none;
+}
+
+.applicantsLoading {
+    width: 100%;
+    min-height: 350px;
+    background: transparent;
+    border-radius: 10px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 10em;
+}
+
+.applicantsLoading>* {
+    animation: myAnim 2s cubic-bezier(0.33, 1, 0.68, 1) 0s infinite normal forwards;
+}
+
+@keyframes myAnim {
+
+    0%,
+    50%,
+    100% {
+        opacity: 0.7;
+    }
+
+    25%,
+    75% {
+        opacity: 0.3;
+    }
+}
+
+.modal1,
+.modal2 {
+    display: none;
+    z-index: 1000;
+    max-width: 95vw;
+    position: absolute;
+    bottom: 0;
+    padding: 10px 40px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-top: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    border-radius: 10px 10px 0 0;
+}
+
+.modal1,
+.modal2,
+.modal-header,
+.modal-body,
+.modal-body>form,
+.modal-header>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-header>div>p {
+    color: var(--errorColor);
+    margin-bottom: 5px;
+}
+
+.modal-header>h4 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.modal-header>*,
+.modal-body>*,
+.modal-body>form>* {
+    width: 100%;
+}
+
+.modal-body>form>* {
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    min-height: 35px;
+    padding: 3px 10px;
+}
+
+.modal-body>form>input[type=submit] {
+    background: var(--boxColor);
+    color: var(--background);
+}
+
+.forgotPassword {
+    z-index: 100;
+    transform: translateY(-80px);
+    padding: 5px 20px;
+    /* background: var(--secondaryColor);
+    color: var(--background); */
+    border: 0;
+    border-radius: 10px;
+}
+
+.modal1>.background {
+    z-index: 11;
+}
+
+.closeButton {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: var(--errorColor);
+    border-radius: 50%;
+    top: -20px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.adminUserSection {
+    height: 100vh;
+    width: 100%;
+    padding: 10px;
+    padding-left: 90px;
+    padding-bottom: 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+.usersearchBox {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 10px;
+}
+
+.usersearchBox h3 {
+    color: var(--secondaryColor);
+}
+
+.usersearchBox form {
+    display: flex;
+    gap: 3px;
+}
+
+.usersearchBox>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.usersearchBox form>*,
+.usersearchBox>div>button {
+    border: 1px solid var(--shadowColor);
+    height: 25px;
+    padding: 3px 10px;
+    background: var(--background);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.usersearchBox form>button:hover,
+.usersearchBox div>button:hover {
+    cursor: pointer;
+    background: var(--secondaryColor);
+}
+
+.usersearchBox form>button:hover ion-icon,
+.usersearchBox div>button:hover ion-icon {
+    color: var(--background);
+}
+
+.userContainer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 20px;
+    min-height: 81.5vh;
+    gap: 10px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.userContainer::-webkit-scrollbar {
+    display: none;
+}
+
+
+.userCard {
+    width: 300px;
+    height: 225px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--background);
+}
+
+
+
+.userProfile {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    opacity: 0.2;
+    transform: scale(2);
+    transform-origin: bottom left;
+    z-index: -2;
+}
+
+.userImage {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    width: 70%;
+    top: 10px;
+    right: inherit;
+}
+
+.userInfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.activity {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.uactive,
+.uinactive {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: grey;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.uactive {
+    background: rgb(60, 242, 60);
+}
+
+.uinactive {
+    background: rgb(255, 95, 67);
+}
+
+
+.userInfoFooter {
+    position: absolute;
+    bottom: 0;
+    /* background: var(--secondaryColor); */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    transform: scale(0);
+    transition-delay: 0.3s;
+}
+
+.userInfoFooter>* {
+    width: 50%;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid var(--shadowColor);
+    padding: 5px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    background: var(--background);
+}
+
+.userInfoFooter>*:hover{ 
+    background: var(--secondaryColor);
+    color: var(--background);
+}
+
+.userInfoText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    position: absolute;
+    transform: translateY(144px);
+}
+
+.userCard:hover .userInfoText,.userInfoText {
+    transform: translateY(0);
+}
+
+.userCard:hover .userInfoFooter, .userInfoFooter {
+    transform: scale(1);
+}
+
+.userCard:hover .userImage, .userImage{
+    width: 11%;
+    top: 5px;
+    right: 10px;
+}
+
+.userInfoText>div {
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.userInfoText>div>p {
+    width: 85%;
+    background: rgba(0, 0, 0, 0.1);
+    text-align: left;
+    padding: 3px 10px;
+    border-radius: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.role {
+    position: absolute;
+    bottom: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 3px 5px;
+    font-size: 0.6em;
+    z-index: 11;
+    background: var(--background);
+}
+
+.userCard:hover .role,.role{
+    bottom: 198px;
+    left: 25px;
+}
+
+.newSearchForm {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 3px;
+    border-radius: 10px;
+}
+
+.newPagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.newPagination>div {
+    padding: 10px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    display: flex;
+    gap: 5px;
+}
+
+.newPagination>div>span,
+.newPagination>div>a,
+.newPagination>div>span>span,
+.newPagination>div>span>a {
+    padding: 3px 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.newPagination>div>span>span,
+.newPagination>div>span>a {
+    padding: 3px 5px;
+    border: 0;
+}
+
+.newPagination>div>span>a,
+.newPagination>div>a {
+    text-decoration: none;
+    color: var(--secondaryColor);
+}
+.newPagination>div>a>ion-icon{
+    color: var(--secondaryColor);
+}
+.newPagination>div>p{
+    padding: 3px 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.jobPostCard {
+    position: relative;
+    width: 280px;
+    height: 320px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 0 10px var(--shadowColor);
+}
+
+.jobPostCode {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 2px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.jobPostStatus {
+    position: absolute;
+    gap: 5px;
+    top: 5px;
+    left: 5px;
+    padding: 2px 10px;
+    display: flex;
+}
+
+.jobPostStatus>p {
+    font-size: 0.7em;
+    background: yellow;
+    border-radius: 20px;
+    padding: 2px 10px;
+}
+
+.focyes,
+.focno {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: lightgray;
+}
+
+.focyes {
+    background: limegreen;
+}
+
+.jobPostCard>img {
+    position: absolute;
+    width: 80%;
+    top: -40%;
+    right: -20%;
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0.5;
+    background: var(--secondaryColor);
+    background-blend-mode: overlay;
+}
+
+.jobPostFooterM {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    background: var(--secondaryColor);
+    width: 100%;
+    padding: 5px 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.jobPostFooterM>p,
+.jobPostFooterM>a {
+    padding: 3px 0px 3px 10px;
+    border: 1px solid var(--background);
+    border-radius: 20px;
+}
+
+.jobPostFooterM>p>span {
+    padding: 3px 10px;
+    border: 1px solid var(--background);
+    background: var(--background);
+    color: var(--fontColor);
+    border-radius: 20px;
+    font-weight: 700;
+}
+
+.jobPostFooterM>a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px 10px;
+    background: var(--background);
+    text-decoration: none;
+}
+
+.jobPostFooterM>a:hover {
+    animation: boxmove 0.5s linear;
+}
+
+@keyframes boxmove {
+
+    0%,
+    100% {
+        transform: translateY(0px) scale(1);
+    }
+
+    50% {
+        transform: translateY(-2px) scale(1.01);
+    }
+}
+
+.jobPostInfo {
+    position: relative;
+    width: 100%;
+    border-radius: 10px;
+    padding: 5px;
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.jobPostInfo>p,
+.jobPostInfo>div>p {
+    background: var(--background);
+    width: 100%;
+    border-radius: 10px;
+    padding: 3px 5px;
+}
+
+.jobPostInfo>p:nth-child(3) {
+    height: 80px;
+}
+
+.jobPostInfo>p>span:nth-child(1),.jobPostInfo>div>p>span:nth-child(1) {
+    color: var(--secondaryColor);
+    margin-right: 5px;
+    font-weight: 200;
+}
+
+.jobPostInfo>div {
+    bottom: 5px;
+    display: flex;
+    gap: 10px;
+}
+
+.jobPostInfo>div>p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+}
+.jobPostCount{
+    background: var(--shadowColor);
+    padding: 0 5px;
+    border-radius: 10px;
+    font-weight: 300;
+}
+
+.pendingPostSection {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 20px;
+    padding-left: 85px;
+    animation: loadIn 0.5s linear;
+}
+
+.postedPostSection {
+    min-height: 100vh;
+}
+
+.jobPostsCantainer {
+    display: flex;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid var(--secondaryColor);
+    border-radius: 10px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pendingPostHead {
+    width: 100%;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    /* transform: translateX(20px) translateY(2px); */
+}
+
+.pendingPostHead>div {
+    margin-left: 5px;
+    border-radius: 20px;
+    border: 1px solid var(--secondaryColor);
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pendingPostHead>div>span {
+    background: var(--shadowColor);
+    padding: 1px 10px;
+    border-radius: 20px;
+}
+
+.searchForm {
+    width: 100%;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px 10px 0 0;
+    padding: 5px 20px;
+    transform: translateY(1px);
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.searchForm>div {
+    border: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.searchForm>*,
+.searchForm>div>input {
+    border-radius: 20px;
+    border: 1px solid var(--secondaryColor);
+    background: var(--background);
+    padding: 5px;
+}
+
+.searchForm>input {
+    padding: 5px 10px;
+    color: var(--fontColor);
+}
+
+.searchForm>button {
+    width: 30px;
+}
+
+.searchForm>h2 {
+    position: absolute;
+    border: 0;
+    padding: 0;
+    bottom: 5px;
+    left: 20px;
+    color: var(--secondaryColor);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-weight: lighter;
+}
+.searchForm>h2>ion-icon{
+    color: var(--secondaryColor);
+}
+.searchForm>h2>span{
+    font-size: 0.7em;
+    font-weight: lighter;
+    border: 1px solid var(--shadowColor);
+    padding: 0 5px;
+    border-radius: 10px;
+}
+.searchForm>h2>span>span{
+    color: var(--secondaryColor);
+}
+
+.postedJobPostsContainer,
+.jobPostsCantainer {
+    border-radius: 0 0 10px 10px;
+    height: 350px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.jobPostCard:hover {
+    border: 5px solid var(--secondaryColor);
+}
+
+.jobPostEdit {
+    position: fixed;
+    backdrop-filter: blur(5px);
+    z-index: 20;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.jobPostEditForm {
+    width: 300px;
+    background: var(--background);
+    box-shadow: 0 0 10px var(--shadowColor);
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 100;
+}
+
+.jobPostEditForm>* {
+    background: var(--background);
+}
+
+.jobPostEditForm>input[type=date] {
+    position: relative;
+    width: 100%;
+    border: 1px solid var(--shadowColor);
+    padding: 5px 10px;
+    border-radius: 10px;
+    overflow: visible;
+}
+
+.jobPostEditForm>input[type=date]::before {
+    position: absolute;
+    content: attr(data-label);
+    top: -15px;
+    background: var(--background);
+    border: 1px solid var(--shadowColor);
+    padding: 1px 10px;
+    border-radius: 10px;
+}
+
+.jobPostEditForm>h2 {
+    position: relative;
+    width: 100%;
+    background: var(--secondaryColor);
+    color: var(--background);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.jobPostEditForm>h2>p {
+    z-index: 21;
+    color: var(--background);
+}
+
+.jobPostEditForm>textarea {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    text-align: center;
+    border: 1px solid var(--shadowColor);
+    padding: 5px 10px;
+    border-radius: 10px;
+    overflow: visible;
+    resize: none;
+}
+
+.jobPostEditForm>div {
+    border: 1px solid var(--shadowColor);
+    padding: 5px 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.jobPostEditForm>div>input {
+    border: 1px solid var(--shadowColor);
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: var(--background);
+}
+
+.jobPostEditForm>div>input:hover {
+    cursor: pointer;
+    background: var(--secondaryColor);
+    color: var(--background);
+    animation: boxmove 0.5s linear;
+}
+
+.jobPostEditForm>h2>img {
+    width: 100%;
+    position: absolute;
+    opacity: 0.5;
+}
+
+.closer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    cursor: pointer;
+}
+.applicantProcessSection{
+    padding: 20px;
+    padding-left: 90px;
+    width: 100%;
+    min-height: 100vh;
+}
+.processsStages{
+    position: relative;
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    border: 1px solid var(--shadowColor);
+    padding: 10px;
+    border-radius: 20px 20px 0 0;
+    gap: 10px;
+    overflow: hidden;
+}
+.processsStages>img{
+    width: 100%;
+    position: absolute;
+    z-index: -2;
+    opacity: 0.8;
+}
+.processsStages>a{
+    position: relative;
+    width: 100px;
+    aspect-ratio: 1/1;
+    border: 1px solid var(--shadowColor);
+    padding: 5px 10px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align:center;
+    text-decoration: none;
+    font-size: 1.2em;
+    transition: .5s cubic-bezier(0.375, 0.885, 0.32, 1.275);
+    /* background: rgba(255, 255, 255, 0.2); */
+    backdrop-filter: blur(1px);
+}
+.processsStages>a::after{
+    content: attr(data-label);
+    position: absolute;
+    bottom: 5px;
+    font-size: 0.6em;
+    width: 70%;
+    color: black;
+}
+.processsStages>a>ion-icon{
+    font-size: 1.6em;
+    color: var(--background);
+    transition: .5s cubic-bezier(0.375, 0.885, 0.32, 1.275);
+}
+.processsStages>a.activeProcess,.processsStages>a:hover{
+    border: 2px solid var(--background);
+    position: relative;
+}
+.processsStages>a.activeProcess>ion-icon,.processsStages>a:hover ion-icon{
+    font-size: 1.8em;
+}
+
+.applicantsParent{
+    transform: translateY(-2px);
+}
+.applicantsParent>.searchForm{
+    border-radius: 0;
+}
+.applicantsContainer{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 15px;
+    border: 1px solid var(--shadowColor);
+    gap: 20px;
+}
+.applicard{
+    position: relative;
+    width: 375px;
+    height: 350px;
+    padding: 10px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+    animation: loadIn var(--i) linear;
+    overflow: hidden;
+    background: var(--background);
+}
+.applicard:hover{
+    box-shadow: 3px 3px var(--secondaryColor),-3px -3px var(--secondaryColor),
+    3px -3px var(--secondaryColor),-3px 3px var(--secondaryColor);
+}
+.applicantImage{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100px;
+    transform: rotateY(0deg);
+}
+.applicantStatus,.applicantCode{
+    position: absolute;
+    border: 1px solid var(--shadowColor);
+    border-radius: 20px;
+    top: 5px;
+    padding: 3px 10px;
+}
+.applicantStatus{
+    left: 35px;
+}
+.applicantCode{
+    right: 5px;
+}
+.applicardButtonContainer{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+.applicantProcessButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    text-decoration: none;
+    color: var(--secondaryColor);
+    padding: 3px 5px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+}
+.applicantProcessButton>ion-icon{
+    color: var(--secondaryColor);
+}
+.applicantInformation{
+    margin: 30px 0px;
+    padding: 5px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+.applicantInformation>p:nth-child(1),.applicantInformation>p:nth-child(2),.applicantInformation>p:nth-child(3),.applicantInformation>p:nth-child(4){
+    display: flex;
+    justify-content: space-between;
+}
+.applicantInformation>p>span{
+    /* border: 1px solid var(--shadowColor); */
+}
+.applicantInformation>p:nth-child(1)>span:nth-child(1),.applicantInformation>p:nth-child(2)>span:nth-child(1),.applicantInformation>p:nth-child(3)>span:nth-child(1),.applicantInformation>p:nth-child(4)>span:nth-child(1){
+    width: 25%;
+}
+.applicantInformation>p:nth-child(1)>span:nth-child(2),.applicantInformation>p:nth-child(2)>span:nth-child(2),.applicantInformation>p:nth-child(3)>span:nth-child(2),.applicantInformation>p:nth-child(4)>span:nth-child(2){
+    width: 70%;
+}
+.applicantInformation>div>p{
+    border: 1px solid var(--shadowColor);
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+.jobPostInformation{
+    position: absolute;
+    width: 75%;
+    bottom:37.5px;
+    right: -3px;
+    background: var(--background);
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px 0 0 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    animation: loadTag 0.5s linear;
+}
+@keyframes loadTag {
+    0%{
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+.jobPostInformation>span:first-child{
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.jobPostInformation>span:last-child{
+    border-radius: 10px;
+    border: 1px solid var(--shadowColor);
+    padding: 1px 5px;
+}
+.applicantInformation>p:nth-child(5){
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    height: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.commentbox{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    border: 0;
+    padding: 5px;
+    outline: none;
+    transform: translateX(100%);
+}
+.applicantInformation>button{
+    border: 0;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.applicantInformation>p:last-child>span:first-child{
+    display: flex;
+    align-items: center;   
+    gap: 5px;
+    border-bottom: 1px solid var(--shadowColor);
+}
+.applicantProcessButton:first-child{
+    background: var(--background);
+}
+.applicantProcessButton:first-child>span{
+    position: absolute;
+    background: var(--secondaryColor);
+    width: 168px;
+    left: 0;
+    padding: 3px 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 10px;
+    z-index: 10;
+    transform-origin: right;
+    transform: scale(0) translateX(-50px);
+}
+.applicantProcessButton:first-child:hover>span{
+    transform: scale(1) translateX(-100px);
+}
+.show-commentbox{
+    transform: translateX(0);
+}
+.pf{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: grey;
+    border-radius: 50%;
+    border: 1px solid var(--shadowColor);
+}
+.pending{
+    background: yellow;
+}
+.failed{
+    background: tomato;
+}
+.passed{
+    background: limegreen;
+}
+.applicantProcessingBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.stages{
+    position: relative;
+    border: 1px solid var(--shadowColor);
+    padding: 5px;
+    border-radius: 10px;
+    display: flex;
+    gap: 10px;
+    overflow: hidden;
+}
+.stages>*{
+    position: relative;
+    border: 1px solid var(--shadowColor);
+    padding: 5px;
+    border-radius: 10px;
+    width: 50%;
+    aspect-ratio: 4/3;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--background);
+}
+.skip-stages{
+    position: absolute;
+    right: 5px;
+    width: 48%;
+    height: 93%;
+    opacity: 0;
+    transform: translateX(150%);
+}
+.show-skip-stages{
+    opacity: 1;
+    transform: translateX(0);
+}
+.pass-fail-box{
+    border: 1px solid var(--shadowColor);
+    padding: 5px;
+    border-radius: 10px;
+}
+.status-box{
+    border: 1px solid var(--shadowColor);
+    padding: 5px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.applicant-process-form{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.new-comment{
+    display: flex;
+    flex-direction: column;
+}
+.new-comment>p{
+    border: 1px solid var(--shadowColor);
+    padding: 3px 5px;
+    border-radius: 10px 10px 0 0;
+    width: 50%;
+    transform: translateX(10px) translateY(1px);
+}
+.new-comment>textarea{
+    background: var(--background);
+    border: 1px solid var(--shadowColor);
+    padding: 3px 5px;
+    border-radius: 10px 10px 0 0;
+    resize: none;
+}
+.new-comment button{
+    background: var(--background);
+    border: 1px solid var(--shadowColor);
+    border-radius: 0 0 10px 10px;
+    cursor: pointer;
+    padding: 5px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+.new-comment button:hover{
+    background: var(--secondaryColor);
+    color: var(--background);
+}
+.back-button{
+    position: absolute;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: var(--secondaryColor);
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--background);
+    top: 10px;
+    right: 10px;
+}
+.backImage{
+    position: absolute;
+    top: -80px;
+    right: -50px;
+    width: 50%;
+    z-index: -1;
+    border-radius: 50%;
+    opacity: 20%;
+}
+.backImage2{
+    position: fixed;
+    top: -80%;
+    right: -30%;
+    width: 70%;
+    z-index: -1;
+    border-radius: 50%;
+    opacity: 20%;
+}
+.processsStages>a>span{
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    padding: 3px 5px;
+    min-width: 30px;
+    border-radius: 10px;
+    background: var(--background);
+}
+
+.data-container{
+    display: flex;
+    gap: 10px;
+}
+.resourceContainer{
+    position: relative;
+    border: 1px solid var(--shadowColor);
+    padding: 10px;
+    border-radius: 0 0 10px 10px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+.data-card{
+    position: relative;
+    border: 1px solid var(--shadowColor);
+    padding: 10px;
+    border-radius: 10px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow: hidden;
+}
+.data-row{
+    border: 1px solid var(--shadowColor);
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.data-row>p{
+    text-align: right;
+}
+.data-button{
+    width: 100%;
+    border: 1px solid var(--shadowColor);
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: var(--secondaryColor);
+    text-decoration: none;
+    text-align: center;
+    color: var(--background);
+}
+.data-button>div>a{
+    cursor: pointer;
+}
+.data-edit-button{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 5px;
+    border-radius: 0 0 0 10px;
+    /* background: var(--secondaryColor); */
+}
+.sort-box>ion-icon{
+    /* color: var(--background); */
+}
+.sort-box{
+    width: 100%;
+    border-bottom: 1px solid var(--shadowColor);
+    padding-bottom: 10px;
+    text-align: right;
+    transition: 0.5s ease-in-out;
+    display: flex;
+    justify-content: space-between;
+}
+.sort-links{
+    display: flex;
+    gap: 5px;
+}
+.sort-links>a{
+    color: var(--background);
+    background: var(--secondaryColor);
+    padding: 3px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.data-status>p{
+    border: 1px solid var(--shadowColor);
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 0.7em;
+}
+.data-card-head{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.data-card-head>div:first-child{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.data-code{
+    width: fit-content;
+    border: 1px solid var(--shadowColor);
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 0.9em;
+    display: flex;
+    gap: 10px;
+}
+.closed{
+    background: orange;
+}
+.dued{
+    background-color: orangered;
+}
+.posted{
+    background: lime;
+}
+.none{
+    background: lightgray;
+}
+.data-card.jobPostCardo{
+    width: 500px;
+}
+.data-card-body{
+    border: 1px solid var(--shadowColor);
+    padding: 10px;
+    border-radius: 10px;
+}
+.data-card-body>div{
+    display: flex;
+    border: 1px solid var(--shadowColor);
+    padding: 3px 5px;
+    border-radius: 10px;
+}
+.data-card-body>div:first-child{
+}
+.data-card-footer,.data-card-footer>div,.data-card-footer>div>div{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.data-card-footer{
+    justify-content: space-between;
+}
+.data-card-footer>div:first-child>div{
+    padding: 3px 5px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 20px;
+}
+.data-card-footer a{
+    padding: 3px 5px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 20px;
+}
+.data-card-footer img{
+    width: 20px;
+    border-radius: 10px;
+}
+.addNewJobPost{
+    width: 400px;
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.addNewJobPost>a{
+    width: 100%;
+    padding: 5px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+    background: var(--secondaryColor);
+    color: var(--background);
+    text-decoration: none;
+    text-align: center;
+    transform: scale(0.97);
+}
+.addForm.jobPostAddForm .addNewJobPost{
+    padding: 50px 30px;
+}
+.addNewJobPost>div{
+    width: 100%;
+    padding: 5px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+}
+.addNewJobPost>div>div>*{
+    width: 100%;
+    padding: 5px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+}
+.addNewJobPost>div>div>label{
+    border: 0;
+}
+.addNewJobPost textarea{
+    resize: vertical;
+}
+.addNewJobPost input[type=checkbox]{
+    width: auto;
+}
+.addNewJobPost input[type=submit]{
+    margin-top: 5px;
+    background: var(--secondaryColor);
+    color: var(--background);
+    cursor: pointer;
+}
+.addNewApplicantForm{
+    transform: none;
+}
+.addNewApplicantForm>form{
+    padding: 40px 30px;
+}
+.addNewApplicantForm>form>div{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.addNewApplicantForm textarea{
+    resize: vertical;
+}
+.addNewApplicantForm>form>div>*{
+    width: 100%;
+    padding: 5px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+}
+.chartContainer{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--shadowColor);
+    border-bottom: 1px solid var(--shadowColor);
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    flex-grow: 0;
+    gap: 5px;
+}
+.chart{
+    display: flex;
+    width: 30%;
+}
+
+#myChart{
+    width: 100%;
+}
+.chartData{
+    position: relative;
+    padding: 3px 5px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+    width: 13%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+.chartData>span:nth-child(2){
+    font-size: 1.5em;
+    padding: 10px;
+    width: 90%;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+    text-align: center;
+}
+.chartData>img{
+    position: absolute;
+    width: 100%;
+    top: -60%;
+}
+.reportboxContainer{
+    display: flex;
+    padding: 10px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.chartContainerReport{
+    width: 50%;
+    border: 0;border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+.chartContainerReport>.chartData{
+    height: 30px;
+    width: 100%;
+}
+.reportTable{
+    width: 85%;
+    display: flex;
+    margin-bottom: 30px;
+}
+.reportBoxContainerHead{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px 10px 0 0;
+    margin-top: 10px ;
+    transform: translateY(1px);
+    width: 80%;
+}
+.reportBoxContainerHead>a{
+    padding: 10px;
+    border: 1px solid var(--shadowColor);
+    border-radius: 10px;
+    text-decoration: none;
+    background: var(--secondaryColor);
+    color: var(--background);
+}
+
+.reportTable table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+  }
+  
+  .reportTable th, td {
+    text-align: left;
+    padding: 8px;
+  }
+  
+  .reportTable tr:nth-child(even){background-color: #f2f2f2}
+
+  .data-card:hover{
+    box-shadow: 0 0 10px var(--shadowColor);
+  }
+
+  .no-data{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    color: var(--secondaryColor);
+    padding: 20px;
+  }
+@media only screen and (max-width: 500px) {
+    
+.chartData{
+    width: 100%;
+}
+.chartContainerReport{
+    width: 100%;
+    border: 0;
+}
+    .chart{
+        width: 100%;
+    }
+    .jobPostSection,.data-section{
+        padding-left: 20px;
+    }
+
+    .searchForm>input[type=text] {
+        width: 100%;
+    }
+
+    .searchForm>div {
+        width: 100%;
+    }
+
+    .postedJobPostsContainer,
+    .jobPostsCantainer {
+        height: 60vh;
+        overflow: hidden;
+        overflow-y: scroll;
+    }
+
+    .pendingPostSection,.applicantProcessSection {
+        padding: 20px;
+    }
+
+    .jobPostsCantainer {
+        justify-content: center;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    .addForm>form {
+        width: 90%;
+    }
+
+    .profileBox {
+        width: 100%;
+    }
+
+    .profileBox {
+        left: 0;
+    }
+
+    .profileBox:nth-child(3) {
+        width: 100%;
+    }
+
+    .historyRow {
+        width: 95%;
+    }
+
+    .loader-box {
+        justify-content: space-between;
+        flex-direction: column;
+        padding: 30px 0 100px 0;
+    }
+
+    .loader {
+        width: 200px;
+        height: 200px;
+    }
+
+    .addApplicant {
+        width: 90vw;
+    }
+
+    .addApplicant>div>div:first-child>* {
+        width: 100%;
+    }
+
+    .addApplicant>div>div:last-child>*,
+    .addApplicant>div>div:first-child>*,
+    .addApplicant>div>div:first-child {
+        width: 100%;
+    }
+
+    .adminUserSection {
+        padding-left: 10px;
+    }
+
+    .jobPostSearch>div>form {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .jobPostSearch>div>form>* {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .jobPostSearch>div>form>div>input[type=date] {
+        width: 70%;
+    }
+
+    .jobPostSearch>div>form>div:last-child>* {
+        width: 50%;
+    }
+
+    .usersearchBox {
+        padding: 10px 60px;
+    }
+
+    .userContainer {
+        justify-content: center;
+    }
+
+    .searchForm>h2{
+
+        transform: scale(0.5) translateX(-50px);
+    }
+}

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Маркетинг</title>
+	<div th:insert="../components/nav :: tags"></div>
+</head>
+
+<body>
+<p class="errornoti" th:text="${message}"></p>
+
+<div th:insert="../components/nav :: navBar"></div>
+
+<div class="pendingPostSection">
+	<div class="pendingPostHead">
+		<h3>Ожидающие вакансии</h3>
+		<div>
+			Всего <span th:text="${pendingJobPosts.size()}"></span>
+		</div>
+	</div>
+	<div class="jobPostsCantainer">
+
+		<div class="data-card jobPostCardo" th:each="jp : ${pendingJobPosts}">
+
+			<img class="backImage" th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${jp.postCode}+''" alt="">
+
+			<input type="hidden" th:class="J+${jp.postId}" th:value="${jp.postName}">
+			<div class="data-card-head">
+				<div>
+					<div class="data-status" th:switch="${jp.postStatus}">
+						<p th:case="'CLOSED'" class="closed">ЗАКРЫТО</p>
+						<p th:case="'DUED'" class="dued">СРОК ИСТЕК</p>
+						<p th:case="'POSTED'" class="posted">ОТКРЫТО</p>
+						<p th:case="*" class="none">НЕТ</p>
+					</div>
+					<div title="Бесплатно" class="focyes" th:if="${jp.foc == true}"></div>
+					<div title="Платно" class="focno" th:if="${jp.foc == false}"></div>
+				</div>
+
+				<p class="data-code" th:text="${jp.postCode}"></p>
+			</div>
+			<div class="jobPostInfo">
+				<p>
+					<span>Название</span> <span th:text="${jp.postName}"></span>
+				</p>
+				<p>
+					<span>Должность</span><span th:text="${jp.jobPosition.positionName}"></span>
+				</p>
+				<p>
+					<span>Комментарий</span> <span th:text="${jp.comment}"></span>
+				</p>
+				<div>
+					<p>
+						<span>Команда</span>
+						<span th:text="${jp.team.teamName}"></span>
+					</p>
+					<p>
+						<span>Отдел</span>
+						<span th:text="${jp.team.department.departmentName}"></span>
+					</p>
+				</div>
+				<div>
+					<p>
+						<span>Дата начала</span>
+						<span th:text="${jp.postDate}"></span>
+					</p>
+					<p>
+						<span>Дата окончания</span>
+						<span th:text="${jp.dueDate}"></span>
+					</p>
+				</div>
+			</div>
+			<div class="data-card-footer">
+				<div>
+					<div>
+						<span>Требуется - </span>
+						<p class="jobPostCount" th:text="${jp.count}"></p>
+					</div>
+				</div>
+				<div class="data-buttons">
+					<div>
+						<a th:onclick="generateUpdateRoleFormJP([[${jp.postId}]],[[${jp.postName}]],[[${jp.count}]]);">
+							<ion-icon name="checkmark-done-outline"></ion-icon>ОПУБЛИКОВАТЬ
+						</a>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<div class="pendingPostSection postedPostSection">
+	<div class="pendingPostHead">
+		<h3>Опубликованные вакансии</h3>
+		<div>
+			Всего <span th:text="${totalJobPosts}"></span>
+		</div>
+	</div>
+
+	<form class="searchForm" th:action="@{/market/showJobPosts/1}">
+		<input type="hidden" name="sortField" th:value="${sortField}" />
+		<input type="hidden" name="sortDir" th:value="${sortDir}" />
+		<input type="text" name="keyword" th:value="${keyword}" placeholder="Введите ключевое слово" />
+
+		<button type="submit">
+			<ion-icon name="search-outline"></ion-icon>
+		</button>
+		<button>
+			<a th:href="@{/market/marketing}">
+				<ion-icon name="refresh-outline"></ion-icon>
+			</a>
+		</button>
+	</form>
+	<div class="chartContainer">
+		<div class="chartData">
+			<span class="chart-name1">Ожидают</span>
+			<span class="agencyCount" th:text="${totalPending}"></span>
+			<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=Pending" alt="">
+		</div>
+		<div class="chartData">
+			<span class="chart-name2">Опубликовано</span>
+			<span class="universityCount" th:text="${totalPosted}"></span>
+			<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=Posted" alt="">
+		</div>
+		<div class="chartData">
+			<span class="chart-name4">СРОК ИСТЕК</span>
+			<span class="trainingCenterCount" th:text="${totalDued}"></span>
+			<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=Dued" alt="">
+		</div>
+		<div class="chartData">
+			<span class="chart-name3">ЗАКРЫТО</span>
+			<span class="directRecruitCount" th:text="${totalClosed}"></span>
+			<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=Closed" alt="">
+		</div>
+		<div class="chartData" style="opacity: 0;">
+			<span class="chart-name5">Другое</span>
+			<span class="othersCount" th:text="${totalResourcesByOthers}"></span>
+		</div>
+		<div>
+			<canvas id="myChart"></canvas>
+		</div>
+	</div>
+	<div class="jobPostsCantainer postedJobPostsContainer">
+		<div class="data-card jobPostCardo" th:each="jp : ${postedJobPosts}">
+
+			<img class="backImage" th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${jp.postCode}+''" alt="">
+
+			<input type="hidden" th:class="J+${jp.postId}" th:value="${jp.postName}">
+			<div class="data-card-head">
+				<div>
+					<div class="data-status" th:switch="${jp.postStatus}">
+						<p th:case="'CLOSED'" class="closed">ЗАКРЫТО</p>
+						<p th:case="'DUED'" class="dued">СРОК ИСТЕК</p>
+						<p th:case="'POSTED'" class="posted">ОТКРЫТО</p>
+						<p th:case="*" class="none">НЕТ</p>
+					</div>
+					<div title="Бесплатно" class="focyes" th:if="${jp.foc == true}"></div>
+					<div title="Платно" class="focno" th:if="${jp.foc == false}"></div>
+				</div>
+
+				<p class="data-code" th:text="${jp.postCode}"></p>
+			</div>
+			<div class="jobPostInfo">
+				<p>
+					<span>Название</span> <span th:text="${jp.postName}"></span>
+				</p>
+				<p>
+					<span>Должность</span><span th:text="${jp.jobPosition.positionName}"></span>
+				</p>
+				<p>
+					<span>Комментарий</span> <span th:text="${jp.comment}"></span>
+				</p>
+				<div>
+					<p>
+						<span>Команда</span>
+						<span th:text="${jp.team.teamName}"></span>
+					</p>
+					<p>
+						<span>Отдел</span>
+						<span th:text="${jp.team.department.departmentName}"></span>
+					</p>
+				</div>
+				<div>
+					<p>
+						<span>Дата начала</span>
+						<span th:text="${jp.postDate}"></span>
+					</p>
+					<p>
+						<span>Дата окончания</span>
+						<span th:text="${jp.dueDate}"></span>
+					</p>
+				</div>
+			</div>
+			<div class="data-card-footer">
+				<div>
+					<div>
+						<span>Требуется - </span>
+						<p class="jobPostCount" th:text="${jp.count}"></p>
+					</div>
+				</div>
+				<div class="data-buttons">
+					<!-- <div>
+                        <a th:onclick="generateUpdateRoleFormJP([[${jp.postId}]],[[${jp.postName}]],[[${jp.count}]]);">
+                            <ion-icon name="checkmark-done-outline"></ion-icon>POST
+                        </a>
+                    </div> -->
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="newPagination">
+		<div>
+			<a th:if="${currentPage > 1}"
+			   th:href="@{'/market/showJobPosts/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Первый</a>
+			<span th:unless="${currentPage > 1}">Первый</span>
+
+			<a th:if="${currentPage > 1}"
+			   th:href="@{'/market/showJobPosts/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Предыдущий</a>
+			<span th:unless="${currentPage > 1}">Предыдущий</span>
+
+			<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+					<a th:if="${i != currentPage}"
+					   th:href="@{'/market/showJobPosts/' + ${i}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}">[[${i}]]</a>
+					<span th:unless="${i != currentPage}">[[${i}]]</span>
+				</span>
+
+			<a th:if="${currentPage < totalPages}"
+			   th:href="@{'/market/showJobPosts/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Следующий</a>
+			<span th:unless="${currentPage < totalPages}">Следующий</span>
+
+			<a th:if="${currentPage < totalPages}"
+			   th:href="@{'/market/showJobPosts/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Последний</a>
+			<span th:unless="${currentPage < totalPages}">Последний</span>
+		</div>
+	</div>
+</div>
+</body>
+
+</html>

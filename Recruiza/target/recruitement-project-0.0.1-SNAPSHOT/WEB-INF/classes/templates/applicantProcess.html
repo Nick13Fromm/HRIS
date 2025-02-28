@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Процесс подачи заявки</title>
+	<div th:insert="../components/nav :: tags"></div>
+</head>
+
+<body>
+<!-- Сообщения об ошибках -->
+<p class="errornoti" th:text="${message}"></p>
+<p class="errornoti" th:text="${msg}"></p>
+<p class="errornoti" th:text="${error}"></p>
+<!-- Конец сообщений -->
+
+<div th:insert="../components/nav :: navBar"></div>
+<section class="applicantProcessSection">
+	<!-- Навигационная панель -->
+	<div class="processsStages">
+		<a class="activeProcess" data-label="Все" th:href="@{'/applicantProcess/' + ${all}}">
+			<ion-icon name="receipt-outline"></ion-icon>
+			<span>[[${allCount}]]</span>
+		</a>
+		<a data-label="Тестирование кода" th:href="@{'/applicantProcess/' + ${ct}}">
+			<ion-icon name="laptop-outline"></ion-icon>
+			<span>[[${ctCount}]]</span>
+		</a>
+		<a data-label="Вводное собеседование" th:href="@{'/applicantProcess/' + ${ii}}">
+			<ion-icon name="chatbox-outline"></ion-icon>
+			<span>[[${iiCount}]]</span>
+		</a>
+		<a data-label="Второе собеседование" th:href="@{'/applicantProcess/' + ${si}}">
+			<ion-icon name="chatbox-ellipses-outline"></ion-icon>
+			<span>[[${siCount}]]</span>
+		</a>
+		<a data-label="Предложение работы" th:href="@{'/applicantProcess/' + ${jo}}">
+			<ion-icon name="briefcase-outline"></ion-icon>
+			<span>[[${joCount}]]</span>
+		</a>
+		<a data-label="Принят на работу" th:href="@{'/applicantProcess/' + ${h}}">
+			<ion-icon name="id-card-outline"></ion-icon>
+			<span>[[${hCount}]]</span>
+		</a>
+		<img src="https://api.dicebear.com/5.x/shapes/svg?seed=seoulK" alt="">
+	</div>
+
+	<div class="applicantsParent">
+		<form class="searchForm" th:action="@{'/applicantPro/1/' + ${keyword}}">
+			<h2>Кандидаты</h2>
+			<input type="hidden" name="sortField" th:value="${sortField}" />
+			<input type="hidden" name="sortDir" th:value="${sortDir}" />
+			<input type="text" name="searchKey" onfocus="this.value=''" th:value="${searchKey}"
+				   placeholder="Поиск" required />
+
+			<button type="submit">
+				<ion-icon name="search-outline"></ion-icon>
+			</button>
+			<button>
+				<a th:href="@{/applicantProcess/allApplicants}">
+					<ion-icon name="refresh-outline"></ion-icon>
+				</a>
+			</button>
+		</form>
+
+		<div class="applicantsContainer">
+			<p class="no-data" th:if="${applicants.size() == 0}">
+				Кандидаты не найдены
+			</p>
+			<div class="applicard" th:each="data : ${applicants}" th:style="'--i:'+${dataStat.index}+';'">
+				<img class="applicantImage" style="transform: scale(0.7); border-radius: 50%;"
+					 th:src="'https://api.dicebear.com/5.x/initials/svg?seed='+${data.applicantName}+''" alt="">
+				<img class="backImage"
+					 th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${data.applicantName}+''" alt="">
+
+				<div class="applicantStatusBox">
+					<div class="pf passed" th:if="${data.currentState == 'Pass'}"></div>
+					<div class="pf pending" th:if="${data.currentState == 'PENDING'}"></div>
+					<div class="pf failed" th:if="${data.currentState == 'Fail'}"></div>
+					<p class="applicantStatus" th:text="${data.applicantStatus}"></p>
+				</div>
+
+				<p class="applicantCode" th:text="${data.applicantCode}"></p>
+				<div class="applicantInformation">
+					<p>
+							<span>
+								<ion-icon name="person-outline"></ion-icon>
+								Имя
+							</span>
+						<span th:text="${data.applicantName}"></span>
+					</p>
+					<p>
+							<span>
+								<ion-icon name="mail-outline"></ion-icon>
+								Email
+							</span>
+						<span th:text="${data.applicantEmail}"></span>
+					</p>
+					<p>
+							<span>
+								<ion-icon name="phone-portrait-outline"></ion-icon>
+								Телефон
+							</span>
+						<span th:text="${data.applicantMobile}"></span>
+					</p>
+					<p>
+							<span>
+								<ion-icon name="storefront-outline"></ion-icon>
+								Адрес
+							</span>
+						<span th:text="${data.address}"></span>
+					</p>
+					<p>
+							<span>
+								<ion-icon name="chatbox-ellipses-outline"></ion-icon>
+								Комментарий
+							</span>
+						<span th:text="${data.comment}"></span>
+					</p>
+				</div>
+
+				<div class="jobPostInformation">
+					<span th:text="${data.jobPost.postName}"></span>
+					<span th:text="${data.jobPosition.positionName}"></span>
+				</div>
+				<div class="applicardButtonContainer">
+					<div>
+						<a class="applicantProcessButton">
+							<ion-icon name="stopwatch-outline"></ion-icon>
+							<span th:text="${data.applyTime}"></span>
+						</a>
+					</div>
+					<div>
+						<a class="applicantProcessButton" th:href="${data.link}" target="_blank">
+							<ion-icon name="cloud-outline"></ion-icon>
+						</a>
+					</div>
+					<div>
+						<a class="applicantProcessButton" th:href="@{'/viewFile/'+${data.applicantId}}">
+							<ion-icon name="eye-outline"></ion-icon>
+						</a>
+					</div>
+					<div th:if="${data.currentState != 'Pass' and data.currentState != 'Fail'}">
+						<a class="applicantProcessButton" th:href="@{/nextProcess(id=${data.applicantId})}">
+							Далее<ion-icon name="chevron-forward-outline"></ion-icon>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Пагинация -->
+		<div class="newPagination" th:if="${totalApplicants > 0}">
+			<div>
+				<a th:if="${currentPage > 1}"
+				   th:href="@{'/applicantPro/1/' + ${keyword} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&searchKey=' + ${searchKey}}">Первая</a>
+				<span th:unless="${currentPage > 1}">Первая</span>
+
+				<a th:if="${currentPage > 1}"
+				   th:href="@{'/applicantPro/' + ${currentPage - 1} + '/' + ${keyword} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&searchKey=' + ${searchKey}}">Предыдущая</a>
+				<span th:unless="${currentPage > 1}">Предыдущая</span>
+
+				<a th:if="${currentPage < totalPages}"
+				   th:href="@{'/applicantPro/' + ${currentPage + 1} + '/' + ${keyword}}">Следующая</a>
+				<span th:unless="${currentPage < totalPages}">Следующая</span>
+			</div>
+		</div>
+	</div>
+</section>
+
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Редактировать пользователя</title>
+</head>
+<body>
+<p th:text="${msg}"></p>
+<p th:text="${error}"></p>
+<div>
+	<form th:action="@{/admin/updateUser}" th:object="${bean}" method="post">
+
+		<div>
+			<input type="hidden" th:field="*{userId}"
+				   placeholder="Введите имя пользователя" />
+		</div>
+
+		<div>
+			<input type="text" th:field="*{userCode}"
+				   readonly="true"/>
+		</div>
+
+		<div>
+			<input type="text" th:field="*{userName}"
+				   placeholder="Введите имя пользователя" />
+		</div>
+
+		<div>
+			<input type="email" th:field="*{userEmail}"
+				   placeholder="Введите email пользователя" />
+		</div>
+
+		<div>
+			<input type="text" th:field="*{userMobile}"
+				   placeholder="Введите телефон пользователя" />
+		</div>
+
+		<div>
+			<input type="password" th:field="*{password}"
+				   placeholder="Введите пароль пользователя" />
+		</div>
+
+		<div>
+			<input type="password" th:field="*{confPassword}"
+				   placeholder="Введите подтверждение пароля пользователя" />
+		</div>
+
+		<div>
+			<select th:field="*{role}">
+				<option th:value="'HR_Role'">HR</option>
+				<option th:value="'DH_Role'">DH</option>
+				<option th:value="'GM_Role'">GM</option>
+				<option th:value="'PM_Role'">PM</option>
+				<option th:value="'TM_Role'">TM</option>
+				<option th:value="'MARKETER'">MK</option>
+			</select>
+		</div>
+
+		<div>
+			<input type="submit" value="Обновить пользователя" />
+			<a th:if="${bean.userStatus == 'ACTIVE'}" th:href="@{/admin/deleteUser(id=${bean.userId})}">
+				<span>Удалить</span>
+			</a>
+			<a th:if="${bean.userStatus == 'DELETED'}" th:href="@{/admin/activeUser(id=${bean.userId})}">
+				<span>Активировать</span>
+			</a>
+		</div>
+
+	</form>
+</div>
+
+<div>
+	<a th:href="@{/admin/addUser}">
+		<span>Назад</span>
+	</a>
+</div>
+</body>
+</html>

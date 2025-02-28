@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать вакансию</title>
+    <div th:insert="../components/nav :: tags"></div>
+</head>
+
+<body>
+<div th:insert="../components/nav :: navBar"></div>
+<div class="addForm jobPostAddForm show">
+    <img class="backImage" th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${jobPost.postCode}+''" alt="">
+    <form class="addNewJobPost" data-formName="Обновить вакансию" th:action="@{/updateJobPost}" method="post"
+          th:object="${jobPost}">
+
+        <input type="hidden" th:field="*{postId}">
+        <input type="hidden" th:field="*{postStatus}">
+
+        <div>
+            <div>
+                <label>Название</label>
+                <input type="text" th:field="*{postName}" placeholder="Введите название вакансии" required />
+            </div>
+            <div>
+                <label for="count">Количество</label>
+                <input type="number" th:field="*{count}" placeholder="Введите количество" min="1" max="10" required />
+            </div>
+            <div>
+                <label for="comment">Комментарий</label>
+                <textarea rows="1" th:field="*{comment}" placeholder="Введите комментарий"></textarea>
+            </div>
+            <div>
+                <label for="foc">FOC</label>
+                <input type="checkbox" th:field="*{foc}" />
+            </div>
+        </div>
+        <div>
+            <div>
+                <label for="teams">Выберите отдел</label>
+                <select id="departmentSelect" name="departmentId" onchange="getTeams();">
+                    <option th:each="d : ${departmentList}" th:value="${d.departmentId}"
+                            th:text="${d.departmentName}">
+                    </option>
+                </select>
+            </div>
+            <div>
+                <label for="teams">Выберите команду</label>
+                <select id="teamSelect" th:field="*{teamBean}">
+                </select>
+            </div>
+
+            <div>
+                <label for="position">Выберите должность</label>
+                <select th:field="*{jobPositionId}">
+                    <option th:each="p : ${positionList}" th:value="${p.positionId}" th:text="${p.positionName}">
+                    </option>
+                </select>
+            </div>
+
+            <div style="display: none;">
+                <label for="resource">Выберите ресурс для набора персонала</label>
+                <select th:field="*{resourceId}">
+                    <option th:each="r : ${resourceList}" th:value="${r.resourceId}" th:text="${r.resourceName}">
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <input type="submit" value="Обновить" />
+            </div>
+
+        </div>
+        <a th:href="@{/jobPost}">Назад</a>
+    </form>
+</div>
+
+<div>
+    <form th:action="@{/updateJobPost}" method="post" th:object="${jobPost}">
+
+        <input type="hidden" th:field="*{postId}">
+        <input type="text" th:field="*{postStatus}">
+
+        <div>
+            <label for="name">Название</label>
+            <input type="text" th:field="*{postName}"
+                   placeholder="Введите название вакансии" required />
+            <label th:if="${#fields.hasErrors('postName')}" th:errors="*{postName}"
+                   style="color: red;">Ошибка</label>
+        </div>
+
+        <div>
+            <label for="count">Количество</label>
+            <input type="number" th:field="*{count}" placeholder="Введите количество"
+                   min="1" max="10" required />
+            <label th:if="${#fields.hasErrors('count')}" th:errors="*{count}" style="color: red;">Ошибка</label>
+        </div>
+
+        <div>
+            <label for="comment">Комментарий</label>
+            <textarea rows="1" th:field="*{comment}" placeholder="Введите комментарий"></textarea>
+            <label th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" style="color: red;">Ошибка</label>
+        </div>
+
+        <div>
+            <label for="foc">FOC</label>
+            <input type="checkbox" th:field="*{foc}" />
+            <label th:if="${#fields.hasErrors('foc')}" th:errors="*{foc}" style="color: red;">Ошибка</label>
+        </div>
+
+        <div>
+            <label for="department">Выберите отдел</label>
+            <select id="departmentSelect" name="departmentId" onchange="getTeams();" th:field="*{departmentId}">
+                <option th:each="d : ${departmentList}" th:value="${d.departmentId}" th:text="${d.departmentName}">
+                </option>
+            </select>
+        </div>
+
+        <div class="teamBox">
+            <label for="teams">Выберите команду</label>
+            <select id="teamSelect" th:field="*{teamBean}">
+            </select>
+        </div>
+
+        <div>
+            <label for="resource">Выберите ресурс для набора персонала</label>
+            <select th:field="*{resourceId}">
+                <option th:each="r : ${resourceList}" th:value="${r.resourceId}" th:text="${r.resourceName}">
+                </option>
+            </select>
+        </div>
+
+        <div>
+            <label for="position">Выберите должность</label>
+            <select th:field="*{jobPositionId}">
+                <option th:each="p : ${positionList}" th:value="${p.positionId}" th:text="${p.positionName}">
+                </option>
+            </select>
+        </div>
+
+        <div>
+            <p>Статус : <span th:text="*{postStatus}"></span></p>
+        </div>
+
+        <div>
+            <input type="submit" value="Обновить" />
+        </div>
+    </form>
+    <div>
+        <a th:href="@{/jobPost}">Назад</a>
+    </div>
+</div>
+
+</body>
+
+</html>

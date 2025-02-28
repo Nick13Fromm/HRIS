@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Вставить заголовок здесь</title>
+</head>
+<body>
+<h3 th:text="${message}"></h3>
+<form th:action="@{/updateapplicant}" th:object="${applicant}" method="post">
+    <input type="hidden" th:field="*{applicantId}"><br>
+    <input type="text" placeholder="Введите имя" th:field="*{applicantName}"/><br>
+    <input type="text" placeholder="Введите Email" th:field="*{applicantEmail}"/><br>
+    <input type="text" placeholder="Введите телефон" th:field="*{applicantMobile}"/><br>
+    <input type="text" placeholder="Введите адрес" th:field="*{address}"/><br>
+    <input type="text" placeholder="Введите ссылку" th:field="*{link}"/><br>
+    <label>Комментарий</label><br>
+    <textarea rows="5" cols="24" th:field="*{comment}"></textarea><br>
+    <label class="col-md-2 col-form-label">Выберите название вакансии</label>
+    <select class="form-select" aria-label="Recruitement Type" id="type" th:field="*{jobPostBean}">
+        <option th:each=" i : ${jobPostList} " th:value="${i.postId}" th:text="${i.postName}"></option>
+    </select><br>
+    <label class="col-md-2 col-form-label">Выберите должность</label>
+    <select class="form-select" aria-label="Recruitement Type" id="type" th:field="*{jobPositionBean}">
+        <option th:each=" i : ${positionList} " th:value="${i.positionId}" th:text="${i.positionName}"></option>
+    </select><br>
+    <input type="submit" value="Обновить">
+    <a th:href="@{/deleteapplicant(id=${applicant.applicantId})}">Отклонить</a>
+    <a th:href="@{/applicant}">Назад</a>
+</form>
+</body>
+</html>

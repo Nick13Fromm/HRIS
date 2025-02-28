@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Процесс подачи заявки</title>
+	<div th:insert="../components/nav :: tags"></div>
+</head>
+
+<body>
+<!-- Сообщения об ошибках -->
+<p class="errornoti" th:text="${msg}"></p>
+<p class="errornoti" th:text="${error}"></p>
+<!-- Конец сообщений -->
+
+<div th:insert="../components/nav :: navBar"></div>
+<!-- Начало формы -->
+<a class="back-button" th:href="@{/applicantProcess/allApplicants}">
+	<ion-icon name="arrow-back-outline"></ion-icon>
+	<span class="title">Назад</span>
+</a>
+<form class="applicant-process-form" th:action="@{/applicantStatusChange}" th:object="${bean}" method="post">
+
+	<img class="backImage2" th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+*{applicantName}+''" alt="">
+	<!-- Данные формы -->
+	<div class="applicantProcessingBox">
+		<input type="hidden" th:field="*{applicantId}" />
+
+		<div class="applicard">
+			<img class="applicantImage" style="transform: scale(0.7); border-radius: 50%;"
+				 th:src="'https://api.dicebear.com/5.x/initials/svg?seed='+${bean.applicantName}+''" alt="">
+			<img class="backImage" th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${bean.applicantName}+''" alt="">
+
+			<div class="applicantStatusBox">
+				<div class="pf passed" th:if="*{currentState == 'Pass'}"></div>
+				<div class="pf pending" th:if="*{currentState == 'PENDING'}"></div>
+				<div class="pf failed" th:if="*{currentState == 'Fail'}"></div>
+
+				<p class="applicantStatus" th:text="*{applicantStatus}"></p>
+			</div>
+
+			<p class="applicantCode" th:text="*{applicantCode}"></p>
+			<div class="applicantInformation">
+				<p>
+					<ion-icon name="person-outline"></ion-icon>
+					<span th:text="*{applicantName}"></span>
+				</p>
+				<p>
+					<ion-icon name="mail-outline"></ion-icon>
+					<span th:text="*{applicantEmail}"></span>
+				</p>
+				<p>
+					<ion-icon name="phone-portrait-outline"></ion-icon>
+					<span th:text="*{applicantMobile}"></span>
+				</p>
+				<p>
+					<ion-icon name="storefront-outline"></ion-icon>
+					<span th:text="*{address}"></span>
+				</p>
+				<p>
+						<span>
+							<ion-icon name="chatbox-ellipses-outline"></ion-icon>
+							Комментарий
+						</span>
+					<span th:text="*{comment}"></span>
+				</p>
+			</div>
+
+			<div class="jobPostInformation">
+				<span th:text="*{jobPostBean}"></span>
+				<span th:text="*{jobPositionBean}"></span>
+			</div>
+			<div class="applicardButtonContainer">
+				<div>
+					<a class="applicantProcessButton">
+						<ion-icon name="stopwatch-outline"></ion-icon>
+						<span th:text="*{applyTime}"></span>
+					</a>
+				</div>
+				<div>
+					<a class="applicantProcessButton" th:href="*{link}" target="_blank">
+						<ion-icon name="cloud-outline"></ion-icon>
+					</a>
+				</div>
+				<div>
+					<a class="applicantProcessButton" th:href="@{'/viewFile/'+*{applicantId}}">
+						<ion-icon name="eye-outline"></ion-icon>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="status-box">
+			<div class="pass-fail-box">
+				<span>Пройдено</span>
+				<input type="radio" name="checkStatus" th:value="'Pass'" checked> <span> | </span>
+				<span>Не пройдено</span>
+				<input type="radio" name="checkStatus" th:value="'Fail'">
+			</div>
+			<div class="stages">
+				<p th:text="*{applicantStatus}"></p>
+				<input type="text" name="nextStatus" th:value="${nextStatus}" title="Пропустить этап?"
+					   onclick="showCommentBox()" readonly />
+				<select class="skip-stages" name="getStatus">
+					<option th:value="'Code Test'" th:selected="${nextStatus == 'Code Test'}">Тестирование кода</option>
+					<option th:value="'Intro Interview'" th:selected="${nextStatus == 'Intro Interview'}">
+						Вводное собеседование</option>
+					<option th:value="'Second Interview'" th:selected="${nextStatus == 'Second Interview'}">
+						Второе собеседование</option>
+					<option th:value="'Job Offer'" th:selected="${nextStatus == 'Job Offer'}">Предложение работы</option>
+					<option th:value="'Hired'" th:selected="${nextStatus == 'Hired'}">Принят на работу</option>
+				</select>
+			</div>
+			<div class="new-comment">
+				<p>Добавить новый комментарий</p>
+				<textarea rows="5" cols="50" th:field="*{comment}"></textarea>
+				<button type="submit">Сохранить</button>
+				<!-- <button type="button">Отправить письмо</button> -->
+			</div>
+		</div>
+</form>
+<!-- Конец формы -->
+
+<!-- Экспериментальная функция -->
+<div class="addForm">
+	<form data-formName="Отправить письмо">
+		<div>
+			<label>Имя</label>
+			<input type="text" required="required" class="mailName" placeholder="Введите имя" />
+		</div>
+		<div>
+			<label>Email</label>
+			<input type="text" required="required" class="mailEmail" placeholder="Введите email" />
+		</div>
+		<div>
+			<label>Сообщение</label>
+			<textarea type="text" required="required" class="mailMessage" placeholder="Введите сообщение"></textarea>
+		</div>
+		<div>
+			<input type="button" value="Добавить" onclick="sendMail()"/>
+		</div>
+	</form>
+	<div class="backgroundExit" onclick="generateTeamBox()"></div>
+</div>
+
+</body>
+
+</html>

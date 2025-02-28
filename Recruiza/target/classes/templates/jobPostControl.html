@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Вакансия</title>
+
+	<div th:insert="../components/nav :: tags"></div>
+</head>
+
+<body>
+<p class="errornoti" th:text="${message}"></p>
+
+<div th:insert="../components/nav :: navBar"></div>
+<div th:insert="../components/nav :: sideNav"></div>
+
+<div class="addForm jobPostAddForm">
+	<img class="backImage" th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${jobPost.postCode}+''" alt="">
+	<form class="addNewJobPost" data-formName="Добавить вакансию" th:action="@{/saveJobPost}" method="post"
+		  th:object="${jobPost}">
+		<div>
+			<div>
+				<label>Название</label>
+				<input type="text" th:field="*{postName}" placeholder="Введите название вакансии" required />
+			</div>
+			<div>
+				<label for="count">Количество</label>
+				<input type="number" th:field="*{count}" placeholder="Введите количество" min="1" max="10" required />
+			</div>
+			<div>
+				<label for="comment">Комментарий</label>
+				<textarea rows="1" th:field="*{comment}" placeholder="Введите комментарий"></textarea>
+			</div>
+			<div>
+				<label for="foc">FOC</label>
+				<input type="checkbox" th:field="*{foc}" />
+			</div>
+		</div>
+		<div>
+			<div>
+				<label for="teams">Выберите отдел</label>
+				<select id="departmentSelect" name="departmentId" onchange="getTeams();">
+					<option th:each="d : ${departmentList}" th:value="${d.departmentId}"
+							th:text="${d.departmentName}">
+					</option>
+				</select>
+			</div>
+			<div>
+				<label for="teams">Выберите команду</label>
+				<select id="teamSelect" th:field="*{teamBean}">
+				</select>
+			</div>
+
+			<div>
+				<label for="position">Выберите должность</label>
+				<select th:field="*{jobPositionId}">
+					<option th:each="p : ${positionList}" th:value="${p.positionId}" th:text="${p.positionName}">
+					</option>
+				</select>
+			</div>
+
+			<div style="display: none;">
+				<label for="resource">Выберите ресурс для набора персонала</label>
+				<select th:field="*{resourceId}">
+					<option th:each="r : ${resourceList}" th:value="${r.resourceId}" th:text="${r.resourceName}">
+					</option>
+				</select>
+			</div>
+
+			<div>
+				<input type="submit" value="Добавить" />
+			</div>
+		</div>
+	</form>
+	<div class="backgroundExit" onclick="generateTeamBox()"></div>
+</div>
+
+<!-- <div class="addNewApplicantForm show">
+    <img class="backImage" th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${jobPost.postCode}+''" alt="">
+    <form th:action="@{/saveApplicants}" data-formName="Добавить соискателя" method="post" encType="multipart/form-data" th:object="${jobPost}">
+        <div>
+            <input type="hidden" name="id" th:field="*{postId}">
+            <input type="text" placeholder="Введите имя" name="name" required/>
+            <input type="email" placeholder="Введите email" name="email" required/>
+            <input type="text" placeholder="Введите телефон" name="mobile" required/>
+            <textarea rows="3" cols="24" name="address" required placeholder="Введите адрес"></textarea>
+            <input type="text" placeholder="Введите ссылку" name="link" required/>
+            <textarea rows="5" cols="24" name="comment" placeholder="Напишите комментарий" required></textarea>
+            <input type="file" name="file" multiple required/>
+            <input type="submit" value="Добавить">
+        </div>
+    </form>
+    <div class="backgroundExit" onclick="generateAddNewApplicantForm()"></div>
+</div> -->
+
+<div class="data-section">
+	<form class="searchForm" th:action="@{/searchJobPost/1}">
+		<h2>
+			<ion-icon name="people-outline"></ion-icon>
+			<p th:if="${jobPosts.size() >= 1}">Вакансии</p>
+			<p th:if="${jobPosts.size() == 0}">Вакансия</p>
+			<span>Всего - <span>[[${totalJobPosts}]]</span></span>
+		</h2>
+		<input type="hidden" name="sortField" th:value="${sortField}" />
+		<input type="hidden" name="sortDir" th:value="${sortDir}" />
+		<input type="text" name="keyword" th:value="${keyword}" placeholder="Введите ключевое слово" />
+		<select name="postStatus">
+			<option th:each="status : ${postStatusList}" th:value="${status}"
+					th:selected="(${status} == *{postStatus})" th:text="${status}"></option>
+		</select>
+
+		<button type="submit">
+			<ion-icon name="search-outline"></ion-icon>
+		</button>
+		<button>
+			<a th:href="@{/jobPost}">
+				<ion-icon name="refresh-outline"></ion-icon>
+			</a>
+		</button>
+		<button type="button" onclick="generateTeamBox()">
+			<a>
+				<ion-icon name="add-outline"></ion-icon>
+			</a>
+		</button>
+	</form>
+
+	<div class="resourceContainer">
+		<div class="sort-box" th:if="${totalJobPosts > 0}">
+			<div class="sort-links">
+				<a class="sort-button"
+				   th:href="@{'/searchJobPost/' + ${currentPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${postStatus != null ? '&postStatus=' + postStatus : '' }}">
+					Код
+				</a>
+				<a class="sort-button"
+				   th:href="@{/searchJobPost/{page}(page=${currentPage}, sortField='postName', sortDir=${reverseSortDir}, keyword=${keyword}, postStatus=${postStatus})}">
+					Название
+				</a>
+
+			</div>
+			<div class="sort-button" th:if="${jobPosts != null}">
+				<a th:href="@{/recruizareport}">Получить отчет</a>
+			</div>
+		</div>
+		<div class="chartContainer">
+			<div class="chartData">
+				<span class="chart-name1">Pending</span>
+				<span class="agencyCount" th:text="${totalPending}"></span>
+				<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=Pending" alt="">
+			</div>
+			<div class="chartData">
+				<span class="chart-name2">Posted</span>
+				<span class="universityCount" th:text="${totalPosted}"></span>
+				<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=Posted" alt="">
+			</div>
+			<div class="chartData">
+				<span class="chart-name4">Dued</span>
+				<span class="trainingCenterCount" th:text="${totalDued}"></span>
+				<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=Dued" alt="">
+			</div>
+			<div class="chartData">
+				<span class="chart-name3">Closed</span>
+				<span class="directRecruitCount" th:text="${totalClosed}"></span>
+				<img class="backImage" src="https://api.dicebear.com/5.x/shapes/svg?seed=Closed" alt="">
+			</div>
+			<div class="chartData" style="opacity: 0;">
+				<span class="chart-name5">Others</span>
+				<span class="othersCount" th:text="${totalResourcesByOthers}"></span>
+			</div>
+			<div>
+				<canvas id="myChart"></canvas>
+			</div>
+		</div>
+		<p class="no-data" th:if="${jobPosts.size() == 0}">
+			вакансии не найдены
+		</p>
+		<div class="data-card jobPostCardo" th:each="jp : ${jobPosts}">
+
+			<img class="backImage" th:src="'https://api.dicebear.com/5.x/shapes/svg?seed='+${jp.postCode}+''"
+				 alt="">
+
+			<div class="data-card-head">
+				<div>
+					<div class="data-status" th:switch="${jp.postStatus}">
+						<p th:case="'CLOSED'" class="closed">ЗАКРЫТО</p>
+						<p th:case="'DUED'" class="dued">СРОК ИСТЕК</p>
+						<p th:case="'POSTED'" class="posted">ОТКРЫТО</p>
+						<p th:case="*" class="none">НЕТ</p>
+					</div>
+					<div title="Бесплатно" class="focyes" th:if="${jp.foc == true}"></div>
+					<div title="Платно" class="focno" th:if="${jp.foc == false}"></div>
+				</div>
+
+				<p class="data-code" th:text="${jp.postCode}"></p>
+			</div>
+			<div class="jobPostInfo">
+				<p>
+					<span>Название</span> <span th:text="${jp.postName}"></span>
+				</p>
+				<p>
+					<span>Должность</span><span th:text="${jp.jobPosition.positionName}"></span>
+				</p>
+				<p>
+					<span>Комментарий</span> <span th:text="${jp.comment}"></span>
+				</p>
+				<div>
+					<p>
+						<span>Команда</span>
+						<span th:text="${jp.team.teamName}"></span>
+					</p>
+					<p>
+						<span>Отдел</span>
+						<span th:text="${jp.team.department.departmentName}"></span>
+					</p>
+				</div>
+				<div>
+					<p>
+						<span>Дата начала</span>
+						<span th:text="${jp.postDate}"></span>
+					</p>
+					<p>
+						<span>Дата окончания</span>
+						<span th:text="${jp.dueDate}"></span>
+					</p>
+				</div>
+			</div>
+			<div class="data-card-footer">
+				<div>
+					<!-- <a th:href="'https://docs.google.com/spreadsheets/d/'+${jp.sheetId}+''" target="_blank">
+                        <ion-icon name="cloudy-outline"></ion-icon>
+                    </a> -->
+					<!-- <div>
+                        <img th:src="'https://api.dicebear.com/5.x/initials/svg?seed='+${jp.user.userName}+''" alt="">
+                        <p th:text="${jp.user.userName}"></p>
+                    </div> -->
+					<div>
+						<span>Необходимо - </span>
+						<p class="jobPostCount" th:text="${jp.count}"></p>
+					</div>
+					<div>
+						<span>Соискатели - </span>
+						<p class="jobPostCount" th:text="${countMap.get(jp.postId)}"></p>
+					</div>
+				</div>
+				<div class="data-buttons">
+					<div th:if="${jp.postStatus == 'PENDING'}">
+						<a title="Редактировать данные" th:href="@{/updateJobPost(jobPostId=${jp.postId})}">
+							<ion-icon name="create-outline"></ion-icon>
+						</a>
+					</div>
+					<div th:if="${jp.postStatus == 'POSTED'}">
+						<!-- <a th:href="@{/applicant(jobPostId=${jp.postId})}"> -->
+						<a title="Добавить прямой набор" th:onclick="generateAddNewApplicantForm([[${jp.postId}]],[[${jp.postCode}]]);">
+							<ion-icon name="person-add-outline"></ion-icon>
+						</a>
+					</div>
+					<div th:if="${jp.postStatus == 'POSTED'}">
+						<a title="Закрыть вакансию" th:href="@{/closeJobPost(jobPostId=${jp.postId})}">
+							<ion-icon name="lock-closed-outline"></ion-icon>
+						</a>
+					</div>
+					<div th:if="${jp.postStatus == 'CLOSED'}">
+						<a title="Открыть вакансию" th:href="@{/openJobPost(jobPostId=${jp.postId})}">
+							<ion-icon name="lock-open-outline"></ion-icon>
+						</a>
+					</div>
+					<div>
+						<a title="Получить отчет" th:href="@{'/jobPostReport/' + ${jp.postId}}">
+							<ion-icon name="document-text-outline"></ion-icon>
+						</a>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+	<!-- пагинация -->
+	<div class="newPagination" th:if="${totalJobPosts > 0}">
+		<div>
+			<a th:if="${currentPage > 1}"
+			   th:href="@{'/searchJobPost/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${postStatus != '' ? '&postStatus=' + postStatus : '' }">
+				<ion-icon name="play-skip-back-outline"></ion-icon>
+			</a>
+			<span th:unless="${currentPage > 1}">
+					<ion-icon name="play-skip-back-outline"></ion-icon>
+				</span>
+
+			<a th:if="${currentPage > 1}"
+			   th:href="@{'/searchJobPost/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${postStatus != '' ? '&postStatus=' + postStatus : '' }">
+				<ion-icon name="chevron-back-outline"></ion-icon>
+			</a>
+			<span th:unless="${currentPage > 1}">
+					<ion-icon name="chevron-back-outline"></ion-icon>
+				</span>
+
+			<p>
+				[[${currentPage}]] - [[${totalPages}]]
+			</p>
+
+			<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+					<a th:if="${i != currentPage}"
+					   th:href="@{'/searchJobPost/' + ${i}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}  + ${postStatus != '' ? '&postStatus=' + postStatus : '' }">[[${i}]]</a>
+					<span th:unless="${i != currentPage}">[[${i}]]</span>
+				</span>
+
+			<a th:if="${currentPage < totalPages}"
+			   th:href="@{'/searchJobPost/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${postStatus != '' ? '&postStatus=' + postStatus : '' }">
+				<ion-icon name="chevron-forward-outline"></ion-icon>
+			</a>
+			<span th:unless="${currentPage < totalPages}">
+					<ion-icon name="chevron-forward-outline"></ion-icon>
+				</span>
+
+			<a th:if="${currentPage < totalPages}"
+			   th:href="@{'/searchJobPost/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${postStatus != '' ? '&postStatus=' + postStatus : '' }">
+				<ion-icon name="play-skip-forward-outline"></ion-icon>
+			</a>
+			<span th:unless="${currentPage < totalPages}">
+					<ion-icon name="play-skip-forward-outline"></ion-icon>
+				</span>
+		</div>
+	</div>
+</div>
+
+
+</body>
+
+</html>

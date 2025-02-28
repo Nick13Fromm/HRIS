@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <div th:fragment="tags">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link th:href="@{/css/style.css}" rel="stylesheet" />
+        <script type="text/javascript" th:src="@{/js/main.js}" defer></script>
+        <script type="text/javascript" th:src="@{/js/form.js}" defer></script>
+        <script type="text/javascript" th:src="@{/js/sheet.js}" defer></script>
+        <script type="text/javascript" th:src="@{/js/ajax.js}" defer></script>
+        <script type="text/javascript" th:src="@{/js/chart.js}" defer></script>
+        <script type="text/javascript" th:src="@{/js/mail.js}" defer></script>
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+        <!-- JQuery js1 -->
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js" type="text/javascript"></script>
+        <script src="https://smtpjs.com/v3/smtp.js"></script>
+    </div>
+    <title>Document</title>
+</head>
+
+<body>
+<div class="navbarDiv" th:fragment="navBar">
+    <div class="hamburger" onclick="toggleNav()">
+        <ion-icon name="list-outline"></ion-icon>
+    </div>
+    <nav class="navhide">
+        <div class="logo">
+            <ion-icon name="pizza-outline"></ion-icon>
+        </div>
+        <ul>
+            <li class="list">
+                <a th:href="@{/profile}">
+                        <span class="icon">
+                            <ion-icon name="person-circle-outline"></ion-icon>
+                        </span>
+                    <span class="title">Аккаунт</span>
+                </a>
+            </li>
+            <li class="list active" th:if="${session.user.role != 'MARKETER'}">
+                <a th:href="@{/home}">
+                        <span class="icon">
+                            <ion-icon name="home-outline"></ion-icon>
+                        </span>
+                    <span class="title">Главная</span>
+                </a>
+            </li>
+            <li class="list" th:if="${session.user.role != 'MARKETER'}">
+                <a th:href="@{/applicantProcess/allApplicants}">
+                        <span class="icon">
+                            <ion-icon name="walk-outline"></ion-icon>
+                        </span>
+                    <span class="title">Процесс</span>
+                </a>
+            </li>
+            <li class="list" th:if="${session.user.role != 'MARKETER'}">
+                <a th:href="@{/team}">
+                        <span class="icon">
+                            <ion-icon name="create-outline"></ion-icon>
+                        </span>
+                    <span class="title">Ресурсы</span>
+                </a>
+            </li>
+            <li class="list" sec:authorize="hasAuthority('ADMIN')">
+                <a th:href="@{/admin/addUser/keyword}">
+                        <span class="icon">
+                            <ion-icon name="desktop-outline"></ion-icon>
+                        </span>
+                    <span class="title">Админ панель</span>
+                </a>
+            </li>
+            <li class="list" th:if="${session.user.role == 'MARKETER' or session.user.role == 'ADMIN'}">
+                <a th:href="@{/market/marketing}">
+                        <span class="icon">
+                            <ion-icon name="pricetag-outline"></ion-icon>
+                        </span>
+                    <span class="title">Маркетинг</span>
+                </a>
+            </li>
+            <li class="list">
+                <a onclick="generateLogoutForm()">
+                        <span class="icon">
+                            <ion-icon name="log-out-outline"></ion-icon>
+                        </span>
+                    <span class="title">Выйти</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div th:fragment="sideNav" class="sideResources">
+    <!-- <a class="resource" data-name="пользователь" href="#">
+        <ion-icon name="person-circle-outline"></ion-icon>
+    </a> -->
+    <a class="resource" data-name="должность" th:href="@{/jobposition}">
+        <ion-icon name="ribbon-outline"></ion-icon>
+    </a>
+    <a class="resource" data-name="команда" th:href="@{/team}">
+        <ion-icon name="people-outline"></ion-icon>
+    </a>
+    <a class="resource" data-name="отдел" th:href="@{/department}">
+        <ion-icon name="business-outline"></ion-icon>
+    </a>
+    <a class="resource" data-name="вакансия" th:href="@{/jobPost}">
+        <ion-icon name="document-text-outline"></ion-icon>
+    </a>
+    <a class="resource" data-name="ресурс для набора персонала" th:href="@{/recruitementresource}">
+        <ion-icon name="ear-outline"></ion-icon>
+    </a>
+</div>
+
+
+<div th:fragment="hamburger" class="hamburgerBox">
+    <a href="/home/homepage">...</a>/<a href="/home/homepage">...</a>/<a href="/home/homepage">Главная</a>/<a
+        href="/home/homepage">Управление</a>
+</div>
+
+<div th:fragment="setting" class="settingBox">
+    <ion-icon name="sunny-outline"></ion-icon>
+    <div class="themeBox">
+        <label class="checkBoxContainer">По умолчанию
+            <input type="radio" value="default" id="default" name="radio" class="chooseTheme">
+            <span class="checkmark"></span>
+        </label>
+        <label class="checkBoxContainer">Оранжевый
+            <input type="radio" value="orangy" id="orangy" name="radio" class="chooseTheme">
+            <span class="checkmark"></span>
+        </label>
+        <label class="checkBoxContainer">Техно
+            <input type="radio" value="techno" id="techno" name="radio" class="chooseTheme">
+            <span class="checkmark"></span>
+        </label>
+        <!-- <label class="checkBoxContainer">Hacker
+            <input type="radio" value="hacker" name="radio" class="chooseTheme">
+            <span class="checkmark"></span>
+        </label> -->
+    </div>
+</div>
+</body>
+
+</html>
